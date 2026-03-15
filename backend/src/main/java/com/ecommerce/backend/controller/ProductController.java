@@ -102,10 +102,17 @@ public class ProductController {
             @RequestParam(required = false) String color,
             @RequestParam(defaultValue = "10") int stock,
             @RequestParam(required = false) String variantStocks,
+            @RequestParam(required = false) String imageUrls,
+            @RequestParam(required = false) String authToken,
             @RequestParam(defaultValue = "false") boolean hotTrend,
+            @RequestHeader(value = "Authorization", required = false) String authHeader,
             @RequestParam(required = false) MultipartFile[] images
     ) {
-        List<String> imageUrls = images != null ? cloudinaryService.uploadImages(images) : List.of();
+        requireAdmin(resolveAuthHeader(authHeader, authToken));
+        List<String> uploadedImageUrls = images != null ? cloudinaryService.uploadImages(images) : List.of();
+        String resolvedImageUrls = !uploadedImageUrls.isEmpty()
+                ? String.join(",", uploadedImageUrls)
+                : imageUrls;
         Map<String, Integer> sizeStockMap = parseVariantStocks(variantStocks);
         String normalizedSize = !sizeStockMap.isEmpty() ? String.join(", ", sizeStockMap.keySet()) : size;
         int resolvedStock = !sizeStockMap.isEmpty()
@@ -124,7 +131,7 @@ public class ProductController {
                 .rating(0)
                 .ratingCount(0)
                 .hotTrend(hotTrend)
-                .imageUrl(imageUrls.isEmpty() ? null : String.join(",", imageUrls))
+                .imageUrl((resolvedImageUrls == null || resolvedImageUrls.isBlank()) ? null : resolvedImageUrls)
                 .build();
 
         Product savedProduct = productRepository.save(product);
@@ -227,5 +234,17 @@ public class ProductController {
         } catch (Exception ex) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
         }
+    }
+
+    private String resolveAuthHeader(String authHeader, String authToken) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader;
+        }
+
+        if (authToken != null && !authToken.isBlank()) {
+            return authToken.startsWith("Bearer ") ? authToken : "Bearer " + authToken;
+        }
+
+        return authHeader;
     }
 }

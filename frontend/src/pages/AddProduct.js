@@ -17,10 +17,50 @@ function getSizeOptions(category) {
   return sizeOptionsByCategory[category] || sizeOptionsByCategory.default;
 }
 
+async function uploadImagesToCloudinary(files) {
+  const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
+  const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
+
+  if (!files.length) {
+    return [];
+  }
+
+  if (!cloudName || !uploadPreset) {
+    throw new Error("Cloudinary frontend config is missing");
+  }
+
+  const uploadedUrls = [];
+
+  for (const file of files) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", uploadPreset);
+
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+      method: "POST",
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error("Cloudinary upload failed");
+    }
+
+    const data = await response.json();
+    if (!data.secure_url) {
+      throw new Error("Cloudinary upload did not return a secure URL");
+    }
+
+    uploadedUrls.push(data.secure_url);
+  }
+
+  return uploadedUrls;
+}
+
 function AddProduct() {
   const [imageFiles, setImageFiles] = useState([]);
   const [catalogProducts, setCatalogProducts] = useState([]);
   const [sizeStocks, setSizeStocks] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -86,6 +126,8 @@ function AddProduct() {
 
   const handleAddProduct = async () => {
     try {
+      setIsSubmitting(true);
+      const token = localStorage.getItem("token");
       const payload = new FormData();
       const activeVariantEntries = Object.entries(sizeStocks)
         .filter(([_, stock]) => Number(stock) > 0);
@@ -97,6 +139,11 @@ function AddProduct() {
 
       if (!activeVariantEntries.length) {
         alert("Please add at least one size with stock.");
+        return;
+      }
+
+      if (!token) {
+        alert("Please log in again as admin.");
         return;
       }
 
@@ -116,8 +163,11 @@ function AddProduct() {
       payload.append("color", formData.color);
       payload.append("variantStocks", JSON.stringify(variantStocks));
       payload.append("hotTrend", formData.hotTrend);
-
-      // Image upload is temporarily skipped here so product creation does not fail on upstream 403s.
+      payload.append("authToken", token);
+      const uploadedImageUrls = await uploadImagesToCloudinary(imageFiles);
+      if (uploadedImageUrls.length) {
+        payload.append("imageUrls", uploadedImageUrls.join(","));
+      }
 
       const response = await fetch("http://localhost:8080/api/products", {
         method: "POST",
@@ -154,6 +204,8 @@ function AddProduct() {
         "Failed to add product";
 
       alert(`Failed to add product: ${message}`);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -230,7 +282,7 @@ function AddProduct() {
               />
               <small>
                 {imageFiles.length > 0
-                  ? `${imageFiles.length} image(s) selected. Product will be added first; image upload is currently skipped.`
+                  ? `${imageFiles.length} image(s) selected for Cloudinary upload.`
                   : "Choose one or more product images"}
               </small>
             </label>
@@ -246,7 +298,9 @@ function AddProduct() {
             </label>
           </div>
 
-          <button className="auth-primary-button" onClick={handleAddProduct}>Add Product</button>
+          <button className="auth-primary-button" onClick={handleAddProduct} disabled={isSubmitting}>
+            {isSubmitting ? "Adding Product..." : "Add Product"}
+          </button>
         </section>
 
         <section className="admin-form-card">
