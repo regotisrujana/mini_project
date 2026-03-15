@@ -22,7 +22,7 @@ function Login() {
       localStorage.setItem("email", res.data.email);
 
       alert("Login Successful");
-      navigate("/dashboard");
+      navigate("/");
     } catch (err) {
       console.log(err.response || err);
       alert("Login Failed");
@@ -30,28 +30,40 @@ function Login() {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
+    <div className="auth-shell">
+      <div className="auth-panel">
+        <div className="auth-copy">
+          <p className="auth-eyebrow">Welcome Back</p>
+          <h2>Sign in to continue shopping with VASTRA AI</h2>
+          <p>Track orders, keep your wishlist, and move from cart to checkout without losing your picks.</p>
+        </div>
 
-      <input
-        type="email"
-        placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <br /><br />
+        <div className="auth-form-card">
+          <h3>Login</h3>
 
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <br /><br />
+          <input
+            className="auth-input"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-      <button onClick={handleLogin}>Login</button>
+          <input
+            className="auth-input"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-      <p>
-        Don't have account? <Link to="/register">Register</Link>
-      </p>
+          <button className="auth-primary-button" onClick={handleLogin}>Login</button>
+
+          <p className="auth-switch">
+            Don't have an account? <Link to="/register">Register</Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

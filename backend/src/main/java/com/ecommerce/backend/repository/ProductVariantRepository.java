@@ -9,4 +9,6 @@ import com.ecommerce.backend.entity.ProductVariant;
 public interface ProductVariantRepository extends JpaRepository<ProductVariant, Long> {
 
     List<ProductVariant> findByProductId(Long productId);
+
+    void deleteByProductId(Long productId);
 }

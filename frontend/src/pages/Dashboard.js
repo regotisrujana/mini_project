@@ -1,11 +1,38 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const navigate = useNavigate();
+  const [wishlistCount, setWishlistCount] = useState(0);
   const token = localStorage.getItem("token");
   const name = localStorage.getItem("name");
   const role = localStorage.getItem("role");
   const email = localStorage.getItem("email");
+
+  useEffect(() => {
+    if (!token) {
+      setWishlistCount(0);
+      return;
+    }
+
+    axios.get("http://localhost:8080/api/wishlist", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then((res) => {
+        setWishlistCount(res.data.length);
+      })
+      .catch((err) => {
+        console.log("Error fetching wishlist count:", err.response || err);
+        if (err.response?.status === 401) {
+          localStorage.clear();
+          alert("Session expired. Please log in again.");
+          navigate("/login");
+        }
+      });
+  }, [token, navigate]);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -13,32 +40,51 @@ function Dashboard() {
   };
 
   return (
-    <div>
-      <h2>Dashboard</h2>
+    <div className="account-shell">
+      <section className="account-hero">
+        <div>
+          <p className="auth-eyebrow">My Account</p>
+          <h1>{name ? `Welcome back, ${name}` : "Welcome back"}</h1>
+          <p>Keep track of your saved pieces, shopping bag, and account details from one clean dashboard.</p>
+        </div>
+        <div className="account-chip-stack">
+          <span className="account-chip">{role || "USER"}</span>
+          <span className="account-chip">{email || "No email found"}</span>
+        </div>
+      </section>
 
-      {token ? (
-        <>
-          <p>Welcome, {name}</p>
-          <p>Email: {email}</p>
-          <p>Role: {role}</p>
+      <section className="account-grid">
+        <article className="account-card">
+          <p className="section-label">Quick Access</p>
+          <h3>Keep shopping</h3>
+          <div className="account-links">
+            <Link to="/" className="account-link-card">Browse Products</Link>
+            <Link to="/wishlist" className="account-link-card">Wishlist ({wishlistCount})</Link>
+            <Link to="/cart" className="account-link-card">Cart</Link>
+          </div>
+        </article>
 
-          <br />
+        <article className="account-card">
+          <p className="section-label">Profile</p>
+          <h3>Your details</h3>
+          <div className="account-detail-list">
+            <div><span>Name</span><strong>{name || "Not available"}</strong></div>
+            <div><span>Email</span><strong>{email || "Not available"}</strong></div>
+            <div><span>Role</span><strong>{role || "USER"}</strong></div>
+          </div>
+        </article>
 
-          <Link to="/">View Products</Link>
-          <br /><br />
+        {role === "ADMIN" && (
+          <article className="account-card">
+            <p className="section-label">Admin</p>
+            <h3>Manage catalog</h3>
+            <p>Add new products and keep the storefront fresh with the latest collections.</p>
+            <Link to="/add-product" className="auth-primary-button account-button-link">Add Product</Link>
+          </article>
+        )}
+      </section>
 
-          {role === "ADMIN" && (
-            <>
-              <Link to="/add-product">Add Product</Link>
-              <br /><br />
-            </>
-          )}
-
-          <button onClick={handleLogout}>Logout</button>
-        </>
-      ) : (
-        <p>Please login first</p>
-      )}
+      <button className="auth-secondary-button" onClick={handleLogout}>Logout</button>
     </div>
   );
 }

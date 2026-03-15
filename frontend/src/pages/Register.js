@@ -25,35 +25,48 @@ function Register() {
   };
 
   return (
-    <div>
-      <h2>Register</h2>
+    <div className="auth-shell">
+      <div className="auth-panel">
+        <div className="auth-copy">
+          <p className="auth-eyebrow">Create Account</p>
+          <h2>Join VASTRA AI and save your fashion picks</h2>
+          <p>Build your wishlist, keep your address ready, and check out faster once you are signed in.</p>
+        </div>
 
-      <input
-        type="text"
-        placeholder="Name"
-        onChange={(e) => setName(e.target.value)}
-      />
-      <br /><br />
+        <div className="auth-form-card">
+          <h3>Register</h3>
 
-      <input
-        type="email"
-        placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <br /><br />
+          <input
+            className="auth-input"
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
 
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <br /><br />
+          <input
+            className="auth-input"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-      <button onClick={handleRegister}>Register</button>
+          <input
+            className="auth-input"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-      <p>
-        Already have account? <Link to="/login">Login</Link>
-      </p>
+          <button className="auth-primary-button" onClick={handleRegister}>Register</button>
+
+          <p className="auth-switch">
+            Already have an account? <Link to="/login">Login</Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

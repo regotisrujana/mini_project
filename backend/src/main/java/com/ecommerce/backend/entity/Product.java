@@ -37,5 +37,17 @@ public class Product {
     // MEN: TSHIRT, FORMAL_SHIRT, JEANS
     // WOMEN: WESTERN_TOPS, KURTHI, KURTHI_SET, BOTTOMS, JEANS
 
+    private String size;
+
+    private String color;
+
+    private double rating;
+
+    private int ratingCount;
+
+    private boolean hotTrend;
+
+    private Integer stock;
+
     private String imageUrl;
 }
