@@ -17,45 +17,6 @@ function getSizeOptions(category) {
   return sizeOptionsByCategory[category] || sizeOptionsByCategory.default;
 }
 
-async function uploadImagesToCloudinary(files) {
-  const cloudName = process.env.REACT_APP_CLOUDINARY_CLOUD_NAME;
-  const uploadPreset = process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET;
-
-  if (!files.length) {
-    return [];
-  }
-
-  if (!cloudName || !uploadPreset) {
-    throw new Error("Cloudinary frontend config is missing");
-  }
-
-  const uploadedUrls = [];
-
-  for (const file of files) {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", uploadPreset);
-
-    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
-      method: "POST",
-      body: formData
-    });
-
-    if (!response.ok) {
-      throw new Error("Cloudinary upload failed");
-    }
-
-    const data = await response.json();
-    if (!data.secure_url) {
-      throw new Error("Cloudinary upload did not return a secure URL");
-    }
-
-    uploadedUrls.push(data.secure_url);
-  }
-
-  return uploadedUrls;
-}
-
 function AddProduct() {
   const [imageFiles, setImageFiles] = useState([]);
   const [catalogProducts, setCatalogProducts] = useState([]);
@@ -163,17 +124,17 @@ function AddProduct() {
       payload.append("color", formData.color);
       payload.append("variantStocks", JSON.stringify(variantStocks));
       payload.append("hotTrend", formData.hotTrend);
-      payload.append("authToken", token);
-      const uploadedImageUrls = await uploadImagesToCloudinary(imageFiles);
-      if (uploadedImageUrls.length) {
-        payload.append("imageUrls", uploadedImageUrls.join(","));
+      for (const file of imageFiles) {
+        payload.append("images", file);
       }
 
       const response = await fetch("http://localhost:8080/api/products", {
         method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
         body: payload,
-        mode: "cors",
-        credentials: "omit"
+        mode: "cors"
       });
 
       if (!response.ok) {

@@ -69,8 +69,8 @@ public class ProductController {
     // ✅ Get all products (Public)
     @GetMapping
     public List<Product> getAllProducts(
-            @RequestParam(required = false) String gender,
-            @RequestParam(required = false) String category
+            @RequestParam(name = "gender", required = false) String gender,
+            @RequestParam(name = "category", required = false) String category
     ) {
         if (gender != null && category != null) {
             return productRepository.findByGenderAndCategory(gender, category);
@@ -85,7 +85,7 @@ public class ProductController {
 
     // ✅ Get single product
     @GetMapping("/{id}")
-    public Product getProduct(@PathVariable Long id) {
+    public Product getProduct(@PathVariable("id") Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
@@ -93,20 +93,20 @@ public class ProductController {
     // ✅ Add product (Admin usage for now)
     @PostMapping
     public Product addProduct(
-            @RequestParam String name,
-            @RequestParam String description,
-            @RequestParam double price,
-            @RequestParam String gender,
-            @RequestParam String category,
-            @RequestParam(required = false) String size,
-            @RequestParam(required = false) String color,
-            @RequestParam(defaultValue = "10") int stock,
-            @RequestParam(required = false) String variantStocks,
-            @RequestParam(required = false) String imageUrls,
-            @RequestParam(required = false) String authToken,
-            @RequestParam(defaultValue = "false") boolean hotTrend,
+            @RequestParam("name") String name,
+            @RequestParam("description") String description,
+            @RequestParam("price") double price,
+            @RequestParam("gender") String gender,
+            @RequestParam("category") String category,
+            @RequestParam(name = "size", required = false) String size,
+            @RequestParam(name = "color", required = false) String color,
+            @RequestParam(name = "stock", defaultValue = "10") int stock,
+            @RequestParam(name = "variantStocks", required = false) String variantStocks,
+            @RequestParam(name = "imageUrls", required = false) String imageUrls,
+            @RequestParam(name = "authToken", required = false) String authToken,
+            @RequestParam(name = "hotTrend", defaultValue = "false") boolean hotTrend,
             @RequestHeader(value = "Authorization", required = false) String authHeader,
-            @RequestParam(required = false) MultipartFile[] images
+            @RequestParam(name = "images", required = false) MultipartFile[] images
     ) {
         requireAdmin(resolveAuthHeader(authHeader, authToken));
         List<String> uploadedImageUrls = images != null ? cloudinaryService.uploadImages(images) : List.of();
@@ -153,7 +153,7 @@ public class ProductController {
     // ✅ Add variant (size + color)
     @PostMapping("/{productId}/variants")
     public ProductVariant addVariant(
-            @PathVariable Long productId,
+            @PathVariable("productId") Long productId,
             @RequestBody ProductVariant variant
     ) {
         Product product = productRepository.findById(productId)
@@ -165,14 +165,14 @@ public class ProductController {
 
     // ✅ Get variants of a product
     @GetMapping("/{productId}/variants")
-    public List<ProductVariant> getVariants(@PathVariable Long productId) {
+    public List<ProductVariant> getVariants(@PathVariable("productId") Long productId) {
         return variantRepository.findByProductId(productId);
     }
 
     @PostMapping("/{productId}/ratings")
     public Product rateProduct(
-            @PathVariable Long productId,
-            @RequestParam int value,
+            @PathVariable("productId") Long productId,
+            @RequestParam("value") int value,
             @RequestHeader(value = "Authorization", required = false) String authHeader
     ) {
         return productRatingService.rateProduct(productId, value, authHeader);
@@ -181,7 +181,7 @@ public class ProductController {
     @DeleteMapping("/{id}")
     @Transactional
     public void deleteProduct(
-            @PathVariable Long id,
+            @PathVariable("id") Long id,
             @RequestHeader(value = "Authorization", required = false) String authHeader
     ) {
         requireAdmin(authHeader);
@@ -217,21 +217,28 @@ public class ProductController {
 
     private void requireAdmin(String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            System.err.println("requireAdmin: authHeader is null or doesn't start with Bearer");
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing token");
         }
 
         try {
             String email = jwtService.extractEmail(authHeader.substring(7));
+            System.out.println("requireAdmin: extracted email = " + email);
             String role = userRepository.findByEmail(email)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"))
                     .getRole();
+            System.out.println("requireAdmin: found role = " + role);
 
             if (!"ADMIN".equalsIgnoreCase(role)) {
+                System.err.println("requireAdmin: role is not ADMIN, it is " + role);
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only admins can manage products");
             }
         } catch (ResponseStatusException ex) {
+            System.err.println("requireAdmin: caught ResponseStatusException: " + ex.getMessage());
             throw ex;
         } catch (Exception ex) {
+            System.err.println("requireAdmin: caught Exception: " + ex.getMessage());
+            ex.printStackTrace();
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
         }
     }

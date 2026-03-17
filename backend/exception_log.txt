@@ -1,0 +1,94 @@
+﻿
+  2026-03-17T04:11:26.115+05:30  INFO 8484 --- [backend] [           main] c.ecommerce.backend.BackendApplication   : 
+No active profile set, falling back to 1 default profile: "default"
+  2026-03-17T04:11:26.864+05:30  INFO 8484 --- [backend] [           main] .s.d.r.c.RepositoryConfigurationDelegate : 
+Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+  2026-03-17T04:11:26.934+05:30  INFO 8484 --- [backend] [           main] .s.d.r.c.RepositoryConfigurationDelegate : 
+Finished Spring Data repository scanning in 59 ms. Found 8 JPA repository interfaces.
+  2026-03-17T04:11:27.555+05:30  INFO 8484 --- [backend] [           main] o.s.boot.tomcat.TomcatWebServer          : 
+Tomcat initialized with port 8080 (http)
+  2026-03-17T04:11:27.574+05:30  INFO 8484 --- [backend] [           main] o.apache.catalina.core.StandardService   : 
+Starting service [Tomcat]
+  2026-03-17T04:11:27.575+05:30  INFO 8484 --- [backend] [           main] o.apache.catalina.core.StandardEngine    : 
+Starting Servlet engine: [Apache Tomcat/11.0.15]
+  2026-03-17T04:11:27.652+05:30  INFO 8484 --- [backend] [           main] b.w.c.s.WebApplicationContextInitializer : 
+Root WebApplicationContext: initialization completed in 1459 ms
+  2026-03-17T04:11:27.776+05:30  INFO 8484 --- [backend] [           main] org.hibernate.orm.jpa                    : 
+HHH008540: Processing PersistenceUnitInfo [name: default]
+  2026-03-17T04:11:27.832+05:30  INFO 8484 --- [backend] [           main] org.hibernate.orm.core                   : 
+HHH000001: Hibernate ORM core version 7.2.1.Final
+  2026-03-17T04:11:28.326+05:30  INFO 8484 --- [backend] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : 
+No LoadTimeWeaver setup: ignoring JPA class transformer
+  2026-03-17T04:11:28.361+05:30  INFO 8484 --- [backend] [           main] com.zaxxer.hikari.HikariDataSource       : 
+HikariPool-1 - Starting...
+  2026-03-17T04:11:28.783+05:30  INFO 8484 --- [backend] [           main] com.zaxxer.hikari.pool.HikariPool        : 
+HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1d9ff1e2
+  2026-03-17T04:11:28.785+05:30  INFO 8484 --- [backend] [           main] com.zaxxer.hikari.HikariDataSource       : 
+HikariPool-1 - Start completed.
+  2026-03-17T04:11:28.861+05:30  INFO 8484 --- [backend] [           main] org.hibernate.orm.connections.pooling    : 
+HHH10001005: Database info:
+  	Database JDBC URL [jdbc:mysql://localhost:3306/ecommerce_db]
+  	Database driver: MySQL Connector/J
+  	Database dialect: MySQLDialect
+  	Database version: 8.0.44
+  	Default catalog/schema: ecommerce_db/undefined
+  	Autocommit mode: undefined/unknown
+  	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+  	JDBC fetch size: none
+  	Pool: DataSourceConnectionProvider
+  	Minimum pool size: undefined/unknown
+  	Maximum pool size: undefined/unknown
+  2026-03-17T04:11:30.082+05:30  INFO 8484 --- [backend] [           main] org.hibernate.orm.core                   : 
+HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+  2026-03-17T04:11:30.178+05:30  INFO 8484 --- [backend] [           main] j.LocalContainerEntityManagerFactoryBean : 
+Initialized JPA EntityManagerFactory for persistence unit 'default'
+  2026-03-17T04:11:30.244+05:30  INFO 8484 --- [backend] [           main] o.s.d.j.r.query.QueryEnhancerFactories   : 
+Hibernate is in classpath; If applicable, HQL parser will be used.
+  2026-03-17T04:11:30.691+05:30  WARN 8484 --- [backend] [           main] JpaBaseConfiguration$JpaWebConfiguration : 
+spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. 
+Explicitly configure spring.jpa.open-in-view to disable this warning
+  2026-03-17T04:11:30.769+05:30  INFO 8484 --- [backend] [           main] r$InitializeUserDetailsManagerConfigurer : 
+Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+> 2026-03-17T04:11:31.319+05:30  WARN 8484 --- [backend] [           main] ConfigServletWebServerApplicationContext : 
+Exception encountered during context initialization - cancelling refresh attempt: 
+org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+  2026-03-17T04:11:31.321+05:30  INFO 8484 --- [backend] [           main] j.LocalContainerEntityManagerFactoryBean : 
+Closing JPA EntityManagerFactory for persistence unit 'default'
+  2026-03-17T04:11:31.323+05:30  INFO 8484 --- [backend] [           main] com.zaxxer.hikari.HikariDataSource       : 
+HikariPool-1 - Shutdown initiated...
+  2026-03-17T04:11:31.330+05:30  INFO 8484 --- [backend] [           main] com.zaxxer.hikari.HikariDataSource       : 
+HikariPool-1 - Shutdown completed.
+  2026-03-17T04:11:31.341+05:30  INFO 8484 --- [backend] [           main] .s.b.a.l.ConditionEvaluationReportLogger : 
+  
+  Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' 
+enabled.
+  2026-03-17T04:11:31.357+05:30 ERROR 8484 --- [backend] [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+  
+  ***************************
+  APPLICATION FAILED TO START
+  ***************************
+  
+  Description:
+  
+  Web server failed to start. Port 8080 was already in use.
+  
+  Action:
+  
+  Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+  
+  [INFO] ------------------------------------------------------------------------
+  [INFO] BUILD FAILURE
+  [INFO] ------------------------------------------------------------------------
+  [INFO] Total time:  7.953 s
+  [INFO] Finished at: 2026-03-17T04:11:31+05:30
+  [INFO] ------------------------------------------------------------------------
+  [ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:4.0.2:run (default-cli) on project 
+backend: Process terminated with exit code: 1 -> [Help 1]
+  [ERROR] 
+  [ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+  [ERROR] Re-run Maven using the -X switch to enable full debug logging.
+  [ERROR] 
+  [ERROR] For more information about the errors and possible solutions, please read the following articles:
+> [ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
+
+

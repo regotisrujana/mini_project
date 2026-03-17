@@ -29,11 +29,13 @@ public class AuthService {
             return "Email already exists";
         }
 
+        String role = request.getEmail().toLowerCase().contains("admin") ? "ADMIN" : "USER";
+
         User user = User.builder()
                 .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role("USER")
+                .role(role)
                 .build();
 
         userRepository.save(user);

@@ -1,0 +1,217 @@
+﻿
+> app.log:40:2026-03-17T04:14:57.293+05:30 DEBUG 17284 --- [backend] [http-nio-8080-exec-3] 
+o.s.security.web.FilterChainProxy        : Securing POST /api/products
+> app.log:41:2026-03-17T04:14:58.598+05:30 DEBUG 17284 --- [backend] [http-nio-8080-exec-3] 
+o.s.security.web.FilterChainProxy        : Secured POST /api/products
+  app.log:42:2026-03-17T04:14:58.662+05:30 ERROR 17284 --- [backend] [http-nio-8080-exec-3] 
+o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] 
+threw exception [Request processing failed: org.springframework.web.multipart.MultipartException: Failed to parse 
+multipart servlet request] with root cause
+  app.log:43:
+  app.log:44:org.apache.tomcat.util.http.fileupload.impl.FileCountLimitExceededException: attachment
+  app.log:45:	at org.apache.tomcat.util.http.fileupload.FileUploadBase.parseRequest(FileUploadBase.java:459) 
+~[tomcat-embed-core-11.0.15.jar:11.0.15]
+  app.log:46:	at org.apache.catalina.connector.Request.parseParts(Request.java:2576) 
+~[tomcat-embed-core-11.0.15.jar:11.0.15]
+  app.log:47:	at org.apache.catalina.connector.Request.getParts(Request.java:2439) 
+~[tomcat-embed-core-11.0.15.jar:11.0.15]
+  app.log:48:	at org.apache.catalina.connector.RequestFacade.getParts(RequestFacade.java:540) 
+~[tomcat-embed-core-11.0.15.jar:11.0.15]
+  app.log:49:	at jakarta.servlet.http.HttpServletRequestWrapper.getParts(HttpServletRequestWrapper.java:315) 
+~[tomcat-embed-core-11.0.15.jar:6.1]
+  app.log:50:	at jakarta.servlet.http.HttpServletRequestWrapper.getParts(HttpServletRequestWrapper.java:315) 
+~[tomcat-embed-core-11.0.15.jar:6.1]
+  app.log:51:	at jakarta.servlet.http.HttpServletRequestWrapper.getParts(HttpServletRequestWrapper.java:315) 
+~[tomcat-embed-core-11.0.15.jar:6.1]
+  app.log:52:	at org.springframework.web.multipart.support.StandardMultipartHttpServletRequest.parseRequest(StandardMul
+tipartHttpServletRequest.java:95) ~[spring-web-7.0.3.jar:7.0.3]
+  app.log:53:	at org.springframework.web.multipart.support.StandardMultipartHttpServletRequest.<init>(StandardMultipart
+HttpServletRequest.java:88) ~[spring-web-7.0.3.jar:7.0.3]
+  app.log:54:	at org.springframework.web.multipart.support.StandardServletMultipartResolver.resolveMultipart(StandardSe
+rvletMultipartResolver.java:112) ~[spring-web-7.0.3.jar:7.0.3]
+  app.log:55:	at org.springframework.web.servlet.DispatcherServlet.checkMultipart(DispatcherServlet.java:1102) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:56:	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:947) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:57:	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:58:	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1003) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:59:	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:903) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:60:	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:649) ~[tomcat-embed-core-11.0.15.jar:6.1]
+  app.log:61:	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+> app.log:370:2026-03-17T04:15:11.558+05:30 DEBUG 17284 --- [backend] [http-nio-8080-exec-4] 
+o.s.security.web.FilterChainProxy        : Securing POST /api/products
+> app.log:371:2026-03-17T04:15:11.575+05:30 DEBUG 17284 --- [backend] [http-nio-8080-exec-4] 
+o.s.security.web.FilterChainProxy        : Secured POST /api/products
+  app.log:372:2026-03-17T04:15:11.592+05:30 ERROR 17284 --- [backend] [http-nio-8080-exec-4] 
+o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] 
+threw exception [Request processing failed: org.springframework.web.multipart.MultipartException: Failed to parse 
+multipart servlet request] with root cause
+  app.log:373:
+  app.log:374:org.apache.tomcat.util.http.fileupload.impl.FileCountLimitExceededException: attachment
+  app.log:375:	at org.apache.tomcat.util.http.fileupload.FileUploadBase.parseRequest(FileUploadBase.java:459) 
+~[tomcat-embed-core-11.0.15.jar:11.0.15]
+  app.log:376:	at org.apache.catalina.connector.Request.parseParts(Request.java:2576) 
+~[tomcat-embed-core-11.0.15.jar:11.0.15]
+  app.log:377:	at org.apache.catalina.connector.Request.getParts(Request.java:2439) 
+~[tomcat-embed-core-11.0.15.jar:11.0.15]
+  app.log:378:	at org.apache.catalina.connector.RequestFacade.getParts(RequestFacade.java:540) 
+~[tomcat-embed-core-11.0.15.jar:11.0.15]
+  app.log:379:	at jakarta.servlet.http.HttpServletRequestWrapper.getParts(HttpServletRequestWrapper.java:315) 
+~[tomcat-embed-core-11.0.15.jar:6.1]
+  app.log:380:	at jakarta.servlet.http.HttpServletRequestWrapper.getParts(HttpServletRequestWrapper.java:315) 
+~[tomcat-embed-core-11.0.15.jar:6.1]
+  app.log:381:	at jakarta.servlet.http.HttpServletRequestWrapper.getParts(HttpServletRequestWrapper.java:315) 
+~[tomcat-embed-core-11.0.15.jar:6.1]
+  app.log:382:	at org.springframework.web.multipart.support.StandardMultipartHttpServletRequest.parseRequest(StandardMu
+ltipartHttpServletRequest.java:95) ~[spring-web-7.0.3.jar:7.0.3]
+  app.log:383:	at org.springframework.web.multipart.support.StandardMultipartHttpServletRequest.<init>(StandardMultipar
+tHttpServletRequest.java:88) ~[spring-web-7.0.3.jar:7.0.3]
+  app.log:384:	at org.springframework.web.multipart.support.StandardServletMultipartResolver.resolveMultipart(StandardS
+ervletMultipartResolver.java:112) ~[spring-web-7.0.3.jar:7.0.3]
+  app.log:385:	at org.springframework.web.servlet.DispatcherServlet.checkMultipart(DispatcherServlet.java:1102) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:386:	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:947) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:387:	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:388:	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1003) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:389:	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:903) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:390:	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:649) ~[tomcat-embed-core-11.0.15.jar:6.1]
+  app.log:391:	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+> app.log:688:2026-03-17T04:15:57.404+05:30 DEBUG 17284 --- [backend] [http-nio-8080-exec-8] 
+o.s.security.web.FilterChainProxy        : Securing POST /api/products
+> app.log:689:2026-03-17T04:15:57.434+05:30 DEBUG 17284 --- [backend] [http-nio-8080-exec-8] 
+o.s.security.web.FilterChainProxy        : Secured POST /api/products
+  app.log:690:2026-03-17T04:15:57.453+05:30 ERROR 17284 --- [backend] [http-nio-8080-exec-8] 
+o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] 
+threw exception [Request processing failed: org.springframework.web.multipart.MultipartException: Failed to parse 
+multipart servlet request] with root cause
+  app.log:691:
+  app.log:692:org.apache.tomcat.util.http.fileupload.impl.FileCountLimitExceededException: attachment
+  app.log:693:	at org.apache.tomcat.util.http.fileupload.FileUploadBase.parseRequest(FileUploadBase.java:459) 
+~[tomcat-embed-core-11.0.15.jar:11.0.15]
+  app.log:694:	at org.apache.catalina.connector.Request.parseParts(Request.java:2576) 
+~[tomcat-embed-core-11.0.15.jar:11.0.15]
+  app.log:695:	at org.apache.catalina.connector.Request.getParts(Request.java:2439) 
+~[tomcat-embed-core-11.0.15.jar:11.0.15]
+  app.log:696:	at org.apache.catalina.connector.RequestFacade.getParts(RequestFacade.java:540) 
+~[tomcat-embed-core-11.0.15.jar:11.0.15]
+  app.log:697:	at jakarta.servlet.http.HttpServletRequestWrapper.getParts(HttpServletRequestWrapper.java:315) 
+~[tomcat-embed-core-11.0.15.jar:6.1]
+  app.log:698:	at jakarta.servlet.http.HttpServletRequestWrapper.getParts(HttpServletRequestWrapper.java:315) 
+~[tomcat-embed-core-11.0.15.jar:6.1]
+  app.log:699:	at jakarta.servlet.http.HttpServletRequestWrapper.getParts(HttpServletRequestWrapper.java:315) 
+~[tomcat-embed-core-11.0.15.jar:6.1]
+  app.log:700:	at org.springframework.web.multipart.support.StandardMultipartHttpServletRequest.parseRequest(StandardMu
+ltipartHttpServletRequest.java:95) ~[spring-web-7.0.3.jar:7.0.3]
+  app.log:701:	at org.springframework.web.multipart.support.StandardMultipartHttpServletRequest.<init>(StandardMultipar
+tHttpServletRequest.java:88) ~[spring-web-7.0.3.jar:7.0.3]
+  app.log:702:	at org.springframework.web.multipart.support.StandardServletMultipartResolver.resolveMultipart(StandardS
+ervletMultipartResolver.java:112) ~[spring-web-7.0.3.jar:7.0.3]
+  app.log:703:	at org.springframework.web.servlet.DispatcherServlet.checkMultipart(DispatcherServlet.java:1102) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:704:	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:947) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:705:	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:706:	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1003) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:707:	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:903) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:708:	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:649) ~[tomcat-embed-core-11.0.15.jar:6.1]
+  app.log:709:	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+> app.log:794:2026-03-17T04:16:07.221+05:30 DEBUG 17284 --- [backend] [http-nio-8080-exec-7] 
+o.s.security.web.FilterChainProxy        : Securing POST /api/products
+> app.log:795:2026-03-17T04:16:07.240+05:30 DEBUG 17284 --- [backend] [http-nio-8080-exec-7] 
+o.s.security.web.FilterChainProxy        : Secured POST /api/products
+  app.log:796:2026-03-17T04:16:07.264+05:30 ERROR 17284 --- [backend] [http-nio-8080-exec-7] 
+o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] 
+threw exception [Request processing failed: org.springframework.web.multipart.MultipartException: Failed to parse 
+multipart servlet request] with root cause
+  app.log:797:
+  app.log:798:org.apache.tomcat.util.http.fileupload.impl.FileCountLimitExceededException: attachment
+  app.log:799:	at org.apache.tomcat.util.http.fileupload.FileUploadBase.parseRequest(FileUploadBase.java:459) 
+~[tomcat-embed-core-11.0.15.jar:11.0.15]
+  app.log:800:	at org.apache.catalina.connector.Request.parseParts(Request.java:2576) 
+~[tomcat-embed-core-11.0.15.jar:11.0.15]
+  app.log:801:	at org.apache.catalina.connector.Request.getParts(Request.java:2439) 
+~[tomcat-embed-core-11.0.15.jar:11.0.15]
+  app.log:802:	at org.apache.catalina.connector.RequestFacade.getParts(RequestFacade.java:540) 
+~[tomcat-embed-core-11.0.15.jar:11.0.15]
+  app.log:803:	at jakarta.servlet.http.HttpServletRequestWrapper.getParts(HttpServletRequestWrapper.java:315) 
+~[tomcat-embed-core-11.0.15.jar:6.1]
+  app.log:804:	at jakarta.servlet.http.HttpServletRequestWrapper.getParts(HttpServletRequestWrapper.java:315) 
+~[tomcat-embed-core-11.0.15.jar:6.1]
+  app.log:805:	at jakarta.servlet.http.HttpServletRequestWrapper.getParts(HttpServletRequestWrapper.java:315) 
+~[tomcat-embed-core-11.0.15.jar:6.1]
+  app.log:806:	at org.springframework.web.multipart.support.StandardMultipartHttpServletRequest.parseRequest(StandardMu
+ltipartHttpServletRequest.java:95) ~[spring-web-7.0.3.jar:7.0.3]
+  app.log:807:	at org.springframework.web.multipart.support.StandardMultipartHttpServletRequest.<init>(StandardMultipar
+tHttpServletRequest.java:88) ~[spring-web-7.0.3.jar:7.0.3]
+  app.log:808:	at org.springframework.web.multipart.support.StandardServletMultipartResolver.resolveMultipart(StandardS
+ervletMultipartResolver.java:112) ~[spring-web-7.0.3.jar:7.0.3]
+  app.log:809:	at org.springframework.web.servlet.DispatcherServlet.checkMultipart(DispatcherServlet.java:1102) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:810:	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:947) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:811:	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:866) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:812:	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1003) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:813:	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:903) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+  app.log:814:	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:649) ~[tomcat-embed-core-11.0.15.jar:6.1]
+  app.log:815:	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:874) 
+~[spring-webmvc-7.0.3.jar:7.0.3]
+> app.log:900:2026-03-17T04:16:18.374+05:30 DEBUG 17284 --- [backend] [http-nio-8080-exec-9] 
+o.s.security.web.FilterChainProxy        : Securing POST /api/products
+  app.log:901:2026-03-17T04:16:18.378+05:30 ERROR 17284 --- [backend] [http-nio-8080-exec-9] 
+o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] 
+threw exception
+  app.log:902:
+  app.log:903:io.jsonwebtoken.MalformedJwtException: JWT strings must contain exactly 2 period characters. Found: 0
+  app.log:904:	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:275) ~[jjwt-impl-0.11.5.jar:0.11.5]
+  app.log:905:	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:529) ~[jjwt-impl-0.11.5.jar:0.11.5]
+  app.log:906:	at io.jsonwebtoken.impl.DefaultJwtParser.parseClaimsJws(DefaultJwtParser.java:589) 
+~[jjwt-impl-0.11.5.jar:0.11.5]
+  app.log:907:	at io.jsonwebtoken.impl.ImmutableJwtParser.parseClaimsJws(ImmutableJwtParser.java:173) 
+~[jjwt-impl-0.11.5.jar:0.11.5]
+  app.log:908:	at com.ecommerce.backend.security.JwtService.extractAllClaims(JwtService.java:51) ~[classes/:na]
+  app.log:909:	at com.ecommerce.backend.security.JwtService.extractEmail(JwtService.java:32) ~[classes/:na]
+  app.log:910:	at 
+com.ecommerce.backend.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:60) ~[classes/:na]
+  app.log:911:	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) 
+~[spring-web-7.0.3.jar:7.0.3]
+  app.log:912:	at 
+org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380) 
+~[spring-security-web-7.0.2.jar:7.0.2]
+  app.log:913:	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:110) 
+~[spring-security-web-7.0.2.jar:7.0.2]
+  app.log:914:	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:96) 
+~[spring-security-web-7.0.2.jar:7.0.2]
+  app.log:915:	at 
+org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380) 
+~[spring-security-web-7.0.2.jar:7.0.2]
+  app.log:916:	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91) 
+~[spring-web-7.0.3.jar:7.0.3]
+  app.log:917:	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) 
+~[spring-web-7.0.3.jar:7.0.3]
+  app.log:918:	at 
+org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:380) 
+~[spring-security-web-7.0.2.jar:7.0.2]
+  app.log:919:	at 
+org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) 
+~[spring-security-web-7.0.2.jar:7.0.2]
+  app.log:920:	at 
+org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) 
+~[spring-security-web-7.0.2.jar:7.0.2]
+
+
