@@ -9,4 +9,5 @@ import com.ecommerce.backend.entity.OrderItem;
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     boolean existsByOrderUserIdAndProductId(Long userId, Long productId);
     List<OrderItem> findByOrderUserId(Long userId);
+    List<OrderItem> findByOrderIdIn(List<Long> orderIds);
 }

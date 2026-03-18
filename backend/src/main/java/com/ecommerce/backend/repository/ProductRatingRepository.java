@@ -10,6 +10,7 @@ import com.ecommerce.backend.entity.ProductRating;
 public interface ProductRatingRepository extends JpaRepository<ProductRating, Long> {
 
     Optional<ProductRating> findByUserIdAndProductId(Long userId, Long productId);
+    List<ProductRating> findByUserIdAndProductIdIn(Long userId, List<Long> productIds);
 
     List<ProductRating> findByProductId(Long productId);
 

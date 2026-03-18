@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const categoryOptionsByGender = {
   WOMEN: ["MIDI_DRESSES", "FORMAL_PANTS", "TROUSERS", "FORMAL_SHIRTS", "KURTHIS", "KURTHI_SETS", "JEANS", "TSHIRT"],
@@ -18,10 +18,14 @@ function getSizeOptions(category) {
 }
 
 function AddProduct() {
+  const navigate = useNavigate();
   const [imageFiles, setImageFiles] = useState([]);
   const [catalogProducts, setCatalogProducts] = useState([]);
   const [sizeStocks, setSizeStocks] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [pendingTrendProductIds, setPendingTrendProductIds] = useState([]);
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -42,6 +46,18 @@ function AddProduct() {
       ...(name === "gender" ? { category: "" } : {})
     }));
   };
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    if (role !== "ADMIN") {
+      alert("Admin access only.");
+      navigate("/");
+    }
+  }, [navigate, role, token]);
 
   useEffect(() => {
     axios.get("http://localhost:8080/api/products")
@@ -82,6 +98,57 @@ function AddProduct() {
     } catch (err) {
       console.log(err.response || err);
       alert(err.response?.data?.message || err.response?.data || "Failed to remove product");
+    }
+  };
+
+  const handleTrendToggle = async (productId, nextHotTrend) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Please log in again as admin.");
+      return;
+    }
+
+    try {
+      setPendingTrendProductIds((current) => [...current, productId]);
+      let response;
+
+      try {
+        response = await axios.put(
+          `http://localhost:8080/api/products/${productId}/trend`,
+          { hotTrend: nextHotTrend },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+      } catch (putError) {
+        response = await axios.post(
+          `http://localhost:8080/api/products/${productId}/trend`,
+          { hotTrend: nextHotTrend },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+      }
+
+      setCatalogProducts((current) =>
+        current.map((product) =>
+          product.id === productId ? { ...product, ...response.data } : product
+        )
+      );
+    } catch (err) {
+      console.log(err.response || err);
+      const responseMessage =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        (typeof err.response?.data === "string" ? err.response.data : "") ||
+        err.message;
+      alert(responseMessage || "Failed to update trend status");
+    } finally {
+      setPendingTrendProductIds((current) => current.filter((id) => id !== productId));
     }
   };
 
@@ -282,6 +349,21 @@ function AddProduct() {
                   <h3>{product.name}</h3>
                   <strong>Rs. {product.price}</strong>
                   <p>{product.size || "No sizes added"}</p>
+                  <label className="admin-toggle">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(product.hotTrend)}
+                      onChange={(e) => handleTrendToggle(product.id, e.target.checked)}
+                      disabled={pendingTrendProductIds.includes(product.id)}
+                    />
+                    <span>
+                      {pendingTrendProductIds.includes(product.id)
+                        ? "Updating trend..."
+                        : product.hotTrend
+                          ? "Marked as Hot Trend"
+                          : "Mark as Hot Trend"}
+                    </span>
+                  </label>
                   <button
                     type="button"
                     className="product-action-button admin-danger"

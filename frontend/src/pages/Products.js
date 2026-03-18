@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -60,9 +60,9 @@ function Products() {
     color: ""
   });
   const [quickFilter, setQuickFilter] = useState("");
-  const [ratingInputs, setRatingInputs] = useState({});
-  const [pendingRatings, setPendingRatings] = useState([]);
-  const [purchasedProductIds, setPurchasedProductIds] = useState([]);
+  const [heroIndex, setHeroIndex] = useState(0);
+  const [showColorOptions, setShowColorOptions] = useState(false);
+  const colorFilterRef = useRef(null);
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
 
@@ -129,30 +129,6 @@ function Products() {
       })
       .catch((err) => {
         console.log("Error fetching cart:", err.response || err);
-        if (err.response?.status === 401) {
-          localStorage.clear();
-          alert("Session expired. Please log in again.");
-          navigate("/login");
-        }
-      });
-  }, [token, navigate]);
-
-  useEffect(() => {
-    if (!token) {
-      setPurchasedProductIds([]);
-      return;
-    }
-
-    axios.get("http://localhost:8080/api/orders/purchased-products", {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-      .then((res) => {
-        setPurchasedProductIds(res.data);
-      })
-      .catch((err) => {
-        console.log("Error fetching purchased products:", err.response || err);
         if (err.response?.status === 401) {
           localStorage.clear();
           alert("Session expired. Please log in again.");
@@ -367,50 +343,6 @@ function Products() {
     }
   };
 
-  const handleRateProduct = async (productId) => {
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    const selectedRating = Number(ratingInputs[productId] || 0);
-
-    if (selectedRating < 1 || selectedRating > 5) {
-      alert("Please choose a rating from 1 to 5");
-      return;
-    }
-
-    try {
-      setPendingRatings((current) => [...current, productId]);
-      const res = await axios.post(
-        `http://localhost:8080/api/products/${productId}/ratings?value=${selectedRating}`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
-      );
-
-      setProducts((current) =>
-        current.map((product) =>
-          product.id === productId ? { ...product, ...res.data } : product
-        )
-      );
-    } catch (err) {
-      console.log("Error rating product:", err.response || err);
-      if (err.response?.status === 401) {
-        localStorage.clear();
-        alert("Session expired. Please log in again.");
-        navigate("/login");
-        return;
-      }
-      alert(err.response?.data?.message || err.response?.data || "Failed to submit rating");
-    } finally {
-      setPendingRatings((current) => current.filter((id) => id !== productId));
-    }
-  };
-
   const handleFilterChange = (e) => {
     setFilters((current) => ({
       ...current,
@@ -453,7 +385,7 @@ function Products() {
         .slice(0, 6)
     : [];
 
-  const filteredProducts = products.filter((product) => {
+  const matchesActiveFilters = (product, includeQuickFilter = true) => {
     const price = Number(product.price || 0);
     const rating = Number(product.rating || 0);
     const sizeValues = splitValues(product.size).map((item) => item.toLowerCase());
@@ -480,14 +412,49 @@ function Products() {
     const matchesCategory = !filters.category || category === filters.category.toLowerCase();
     const matchesColor = !filters.color || colorValues.includes(filters.color.toLowerCase());
     const matchesQuick =
+      !includeQuickFilter ||
       !quickFilter ||
       (quickFilter === "TOP_RATED" && rating >= 4) ||
       (quickFilter === "HOT_TRENDS" && product.hotTrend);
 
     return matchesSearch && matchesGender && matchesPrice && matchesSize && matchesCategory && matchesColor && matchesQuick;
-  });
+  };
 
-  const featuredProducts = filteredProducts.slice(0, 3);
+  const filteredProducts = products.filter((product) => matchesActiveFilters(product, true));
+  const heroProducts = products.filter((product) => product.hotTrend && matchesActiveFilters(product, false));
+  const heroSlides = [];
+
+  for (let index = 0; index < heroProducts.length; index += 3) {
+    heroSlides.push(heroProducts.slice(index, index + 3));
+  }
+
+  useEffect(() => {
+    setHeroIndex(0);
+  }, [heroSlides.length]);
+
+  useEffect(() => {
+    if (heroSlides.length <= 1) {
+      return undefined;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setHeroIndex((current) => (current + 1) % heroSlides.length);
+    }, 4500);
+
+    return () => window.clearInterval(intervalId);
+  }, [heroSlides.length]);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (colorFilterRef.current && !colorFilterRef.current.contains(event.target)) {
+        setShowColorOptions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, []);
+
   const trendingProducts = filteredProducts.slice(0, 8);
 
   return (
@@ -619,21 +586,90 @@ function Products() {
       </section>
 
       <section className="storefront-hero">
-        {featuredProducts.map((product, index) => (
-          <article
-            key={product.id}
-            className={`hero-card hero-card-${index + 1}`}
-            onClick={() => navigate(`/products/${product.id}`)}
-          >
-            <img src={getPrimaryImage(product.imageUrl)} alt={product.name} />
-            <div className="hero-overlay" />
-            <div className="hero-copy">
-              <p>{product.category || "New Arrival"}</p>
-              <h3>{product.name}</h3>
-              <span>From Rs. {product.price}</span>
+        {heroProducts.length === 0 ? (
+          <div className="hero-empty-state">
+            <p className="section-label">Trending Products</p>
+            <h3>No trending products yet</h3>
+            <span>Mark products as Hot Trend from the admin panel to show them here.</span>
+          </div>
+        ) : (
+          <>
+            <div className="hero-slider-heading">
+              <div>
+                <p className="section-label">Trending Products</p>
+                <h2>Hot Trend Picks</h2>
+              </div>
+              {heroSlides.length > 1 && (
+                <div className="hero-slider-controls">
+                  <button
+                    className="hero-slider-button"
+                    onClick={() =>
+                      setHeroIndex((current) => (current - 1 + heroSlides.length) % heroSlides.length)
+                    }
+                    aria-label="Previous trending product"
+                  >
+                    &#8249;
+                  </button>
+                  <button
+                    className="hero-slider-button"
+                    onClick={() => setHeroIndex((current) => (current + 1) % heroSlides.length)}
+                    aria-label="Next trending product"
+                  >
+                    &#8250;
+                  </button>
+                </div>
+              )}
             </div>
-          </article>
-        ))}
+
+            <div className="hero-slider-window">
+              <div
+                className="hero-slider-track"
+                style={{ transform: `translateX(-${heroIndex * 100}%)` }}
+              >
+                {heroSlides.map((slide, slideIndex) => (
+                  <div key={`hero-slide-${slideIndex}`} className="hero-slide">
+                    {slide.map((product, cardIndex) => (
+                      <article
+                        key={product.id}
+                        className={`hero-card hero-card-${cardIndex + 1}`}
+                        onClick={() => navigate(`/products/${product.id}`)}
+                      >
+                        <img src={getPrimaryImage(product.imageUrl)} alt={product.name} />
+                        <div className="hero-overlay" />
+                        <div className="hero-copy">
+                          <p>{product.category || "Trending Product"}</p>
+                          <h3>{product.name}</h3>
+                          <span>From Rs. {product.price}</span>
+                        </div>
+                      </article>
+                    ))}
+                    {slide.length < 3 &&
+                      Array.from({ length: 3 - slide.length }).map((_, emptyIndex) => (
+                        <div
+                          key={`hero-slide-${slideIndex}-empty-${emptyIndex}`}
+                          className={`hero-card hero-card-${slide.length + emptyIndex + 1} hero-card-placeholder`}
+                          aria-hidden="true"
+                        />
+                      ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {heroSlides.length > 1 && (
+              <div className="hero-slider-dots" aria-label="Trending products slider">
+                {heroSlides.map((_, index) => (
+                  <button
+                    key={`hero-dot-${index}`}
+                    className={`hero-slider-dot ${index === heroIndex ? "active" : ""}`}
+                    onClick={() => setHeroIndex(index)}
+                    aria-label={`Go to trending slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        )}
       </section>
 
       <section className={`storefront-content ${showFilters ? "filters-open" : ""}`}>
@@ -694,12 +730,65 @@ function Products() {
 
           <label className="filter-label">
             <span>Color</span>
-            <select name="color" value={filters.color} onChange={handleFilterChange}>
-              <option value="">All Colors</option>
-              {colors.map((colorOption) => (
-                <option key={colorOption} value={colorOption}>{colorOption}</option>
-              ))}
-            </select>
+            <div className="color-filter-dropdown" ref={colorFilterRef}>
+              <button
+                type="button"
+                className="color-filter-trigger"
+                onClick={() => setShowColorOptions((current) => !current)}
+                aria-expanded={showColorOptions}
+              >
+                <span className="color-filter-trigger-copy">
+                  {filters.color ? (
+                    <>
+                      <span
+                        className="color-swatch-box"
+                        style={{ backgroundColor: filters.color.toLowerCase() }}
+                        aria-hidden="true"
+                      />
+                      <span>{filters.color}</span>
+                    </>
+                  ) : (
+                    <span>All Colors</span>
+                  )}
+                </span>
+                <span className="color-filter-caret" aria-hidden="true">
+                  {showColorOptions ? "˄" : "˅"}
+                </span>
+              </button>
+
+              {showColorOptions && (
+                <div className="color-filter-menu">
+                  <button
+                    type="button"
+                    className={`color-filter-option ${!filters.color ? "active" : ""}`}
+                    onClick={() => {
+                      setFilters((current) => ({ ...current, color: "" }));
+                      setShowColorOptions(false);
+                    }}
+                  >
+                    <span>All Colors</span>
+                  </button>
+                  {colors.map((colorOption) => (
+                    <button
+                      key={colorOption}
+                      type="button"
+                      className={`color-filter-option ${filters.color === colorOption ? "active" : ""}`}
+                      onClick={() => {
+                        setFilters((current) => ({ ...current, color: colorOption }));
+                        setShowColorOptions(false);
+                      }}
+                    >
+                      <span
+                        className="color-swatch-box"
+                        style={{ backgroundColor: colorOption.toLowerCase() }}
+                        aria-hidden="true"
+                      />
+                      <span>{colorOption}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </label>
 
           <div className="quick-filter-group">
@@ -770,7 +859,9 @@ function Products() {
 
                     <div className="product-meta-row subtle">
                       <span>{splitValues(product.color).join(", ") || "Classic"}</span>
-                      <span>{getMaxCartQuantity(product)} left for cart</span>
+                      {getMaxCartQuantity(product) > 0 && getMaxCartQuantity(product) <= 3 ? (
+                        <span className="product-stock-warning">{getMaxCartQuantity(product)} left</span>
+                      ) : null}
                     </div>
 
                     <div className="product-card-actions">
@@ -827,35 +918,6 @@ function Products() {
                         </button>
                       )}
                     </div>
-
-                    {token && purchasedProductIds.includes(product.id) ? (
-                      <div className="product-rating-row">
-                        <select
-                          value={ratingInputs[product.id] || ""}
-                          onChange={(e) => setRatingInputs((current) => ({
-                            ...current,
-                            [product.id]: e.target.value
-                          }))}
-                        >
-                          <option value="">Your Rating</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                          <option value="5">5</option>
-                        </select>
-                        <button
-                          className="product-action-button ghost"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRateProduct(product.id);
-                          }}
-                          disabled={pendingRatings.includes(product.id)}
-                        >
-                          {pendingRatings.includes(product.id) ? "Saving..." : "Rate"}
-                        </button>
-                      </div>
-                    ) : null}
                   </div>
                 </article>
               ))

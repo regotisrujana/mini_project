@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -193,6 +194,34 @@ public class ProductController {
         productRatingRepository.deleteByProductId(id);
         variantRepository.deleteByProductId(id);
         productRepository.delete(product);
+    }
+
+    @PutMapping("/{id}/trend")
+    public Product updateTrendStatus(
+            @PathVariable("id") Long id,
+            @RequestBody Map<String, Boolean> payload,
+            @RequestHeader(value = "Authorization", required = false) String authHeader
+    ) {
+        return saveTrendStatus(id, payload, authHeader);
+    }
+
+    @PostMapping("/{id}/trend")
+    public Product updateTrendStatusViaPost(
+            @PathVariable("id") Long id,
+            @RequestBody Map<String, Boolean> payload,
+            @RequestHeader(value = "Authorization", required = false) String authHeader
+    ) {
+        return saveTrendStatus(id, payload, authHeader);
+    }
+
+    private Product saveTrendStatus(Long id, Map<String, Boolean> payload, String authHeader) {
+        requireAdmin(authHeader);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        boolean hotTrend = payload != null && Boolean.TRUE.equals(payload.get("hotTrend"));
+        product.setHotTrend(hotTrend);
+        return productRepository.save(product);
     }
 
     private Map<String, Integer> parseVariantStocks(String variantStocks) {

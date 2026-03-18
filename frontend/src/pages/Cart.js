@@ -3,6 +3,11 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 const GUEST_CART_KEY = "guestCartItems";
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
+
+function getSelectedAddressStorageKey() {
+  return `selectedAddressId:${localStorage.getItem("email") || "user"}`;
+}
 
 const loadRazorpayScript = () =>
   new Promise((resolve) => {
@@ -50,9 +55,10 @@ function Cart() {
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState("");
   const [isPaying, setIsPaying] = useState(false);
+  const [savedAddresses, setSavedAddresses] = useState([]);
   const token = localStorage.getItem("token");
-  const savedAddress = localStorage.getItem("checkoutAddress");
-  const address = savedAddress ? JSON.parse(savedAddress) : null;
+  const selectedAddressId = localStorage.getItem(getSelectedAddressStorageKey());
+  const address = savedAddresses.find((item) => String(item.id) === selectedAddressId) || savedAddresses[0] || null;
 
   useEffect(() => {
     if (!token) {
@@ -60,7 +66,7 @@ function Cart() {
       return;
     }
 
-    axios.get("http://localhost:8080/api/cart", {
+    axios.get(`${API_BASE_URL}/api/cart`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -77,6 +83,28 @@ function Cart() {
         }
       });
   }, [token, navigate]);
+
+  useEffect(() => {
+    if (!token) {
+      setSavedAddresses([]);
+      return;
+    }
+
+    axios.get(`${API_BASE_URL}/api/addresses`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then((res) => {
+        setSavedAddresses(res.data);
+        if (res.data.length > 0 && !selectedAddressId) {
+          localStorage.setItem(getSelectedAddressStorageKey(), String(res.data[0].id));
+        }
+      })
+      .catch((err) => {
+        console.log(err.response || err);
+      });
+  }, [token, selectedAddressId]);
 
   const updateQuantity = async (productId, quantity) => {
     const currentItem = items.find((item) => item.productId === productId);
@@ -99,7 +127,7 @@ function Cart() {
     }
 
     try {
-      const res = await axios.put(`http://localhost:8080/api/cart/${productId}?quantity=${quantity}`, null, {
+      const res = await axios.put(`${API_BASE_URL}/api/cart/${productId}?quantity=${quantity}`, null, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -167,7 +195,7 @@ function Cart() {
     try {
       setIsPaying(true);
       const orderRes = await axios.post(
-        "http://localhost:8080/api/orders/razorpay",
+        `${API_BASE_URL}/api/orders/razorpay`,
         {
           address,
           couponCode: appliedCoupon
@@ -179,8 +207,14 @@ function Cart() {
         }
       );
 
+      const razorpayKey = orderRes.data.keyId || process.env.REACT_APP_RAZORPAY_KEY_ID;
+      if (!razorpayKey) {
+        alert("Razorpay key is missing. Add it in backend or frontend environment.");
+        return;
+      }
+
       const options = {
-        key: orderRes.data.keyId || process.env.REACT_APP_RAZORPAY_KEY_ID,
+        key: razorpayKey,
         amount: orderRes.data.amount,
         currency: orderRes.data.currency,
         name: "VASTRA AI",
@@ -189,7 +223,7 @@ function Cart() {
         handler: async function (response) {
           try {
             await axios.post(
-              "http://localhost:8080/api/orders/confirm",
+              `${API_BASE_URL}/api/orders/confirm`,
               {
                 razorpayOrderId: response.razorpay_order_id,
                 razorpayPaymentId: response.razorpay_payment_id,
@@ -204,11 +238,11 @@ function Cart() {
               }
             );
 
-            localStorage.removeItem("checkoutAddress");
             setItems([]);
             setAppliedCoupon("");
             setCouponCode("");
             alert("Payment successful and order placed");
+            navigate("/");
           } catch (err) {
             console.log(err.response || err);
             alert("Payment captured, but order confirmation failed");
@@ -221,10 +255,20 @@ function Cart() {
         },
         theme: {
           color: "#ff3f6c"
+        },
+        modal: {
+          ondismiss: () => {
+            setIsPaying(false);
+          }
         }
       };
 
       const razorpay = new window.Razorpay(options);
+      razorpay.on("payment.failed", function (response) {
+        const reason = response?.error?.description || "Payment failed. Please try again.";
+        alert(reason);
+        setIsPaying(false);
+      });
       razorpay.open();
     } catch (err) {
       console.log(err.response || err);
@@ -275,7 +319,7 @@ function Cart() {
                 <p className="section-label">Delivery Address</p>
                 {address ? (
                   <>
-                    <h3>{address.fullName}, {address.pincode}</h3>
+                    <h3>{address.label || address.fullName}, {address.pincode}</h3>
                     <p>{address.addressLine}, {address.city}, {address.state}</p>
                   </>
                 ) : (

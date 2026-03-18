@@ -7,8 +7,12 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -22,14 +26,18 @@ import org.springframework.web.server.ResponseStatusException;
 import com.ecommerce.backend.dto.AddressRequest;
 import com.ecommerce.backend.dto.ConfirmOrderRequest;
 import com.ecommerce.backend.dto.CreateRazorpayOrderRequest;
+import com.ecommerce.backend.dto.OrderHistoryItemResponse;
+import com.ecommerce.backend.dto.OrderHistoryResponse;
 import com.ecommerce.backend.dto.RazorpayOrderResponse;
 import com.ecommerce.backend.entity.CartItem;
 import com.ecommerce.backend.entity.CustomerOrder;
 import com.ecommerce.backend.entity.OrderItem;
+import com.ecommerce.backend.entity.ProductRating;
 import com.ecommerce.backend.entity.User;
 import com.ecommerce.backend.repository.CartItemRepository;
 import com.ecommerce.backend.repository.CustomerOrderRepository;
 import com.ecommerce.backend.repository.OrderItemRepository;
+import com.ecommerce.backend.repository.ProductRatingRepository;
 import com.ecommerce.backend.repository.UserRepository;
 import com.ecommerce.backend.security.JwtService;
 
@@ -40,6 +48,7 @@ public class OrderService {
     private final CustomerOrderRepository customerOrderRepository;
     private final OrderItemRepository orderItemRepository;
     private final UserRepository userRepository;
+    private final ProductRatingRepository productRatingRepository;
     private final JwtService jwtService;
     private final CustomUserDetailsService customUserDetailsService;
     private final String razorpayKeyId;
@@ -50,6 +59,7 @@ public class OrderService {
             CustomerOrderRepository customerOrderRepository,
             OrderItemRepository orderItemRepository,
             UserRepository userRepository,
+            ProductRatingRepository productRatingRepository,
             JwtService jwtService,
             CustomUserDetailsService customUserDetailsService,
             @Value("${razorpay.key-id}") String razorpayKeyId,
@@ -59,6 +69,7 @@ public class OrderService {
         this.customerOrderRepository = customerOrderRepository;
         this.orderItemRepository = orderItemRepository;
         this.userRepository = userRepository;
+        this.productRatingRepository = productRatingRepository;
         this.jwtService = jwtService;
         this.customUserDetailsService = customUserDetailsService;
         this.razorpayKeyId = razorpayKeyId;
@@ -66,6 +77,7 @@ public class OrderService {
     }
 
     public RazorpayOrderResponse createRazorpayOrder(CreateRazorpayOrderRequest request, String authHeader) {
+        validateRazorpayConfig();
         User user = getCurrentUser(authHeader);
         AddressRequest address = validateAddress(request.getAddress());
         List<CartItem> cartItems = getCartItems(user.getId());
@@ -112,6 +124,7 @@ public class OrderService {
     }
 
     public CustomerOrder confirmOrder(ConfirmOrderRequest request, String authHeader) {
+        validateRazorpayConfig();
         User user = getCurrentUser(authHeader);
         AddressRequest address = validateAddress(request.getAddress());
         List<CartItem> cartItems = getCartItems(user.getId());
@@ -127,9 +140,13 @@ public class OrderService {
 
         CustomerOrder order = CustomerOrder.builder()
                 .userId(user.getId())
+                .orderNumber(generateOrderNumber())
                 .razorpayOrderId(request.getRazorpayOrderId())
                 .razorpayPaymentId(request.getRazorpayPaymentId())
+                .paymentMethod("RAZORPAY")
+                .paymentStatus("PAID")
                 .status("PAID")
+                .trackingStatus("ORDER_CONFIRMED")
                 .totalMrp(priceBreakdown.totalMrp)
                 .couponDiscount(priceBreakdown.couponDiscount)
                 .platformFee(priceBreakdown.platformFee)
@@ -165,6 +182,74 @@ public class OrderService {
         return savedOrder;
     }
 
+    public List<OrderHistoryResponse> getOrders(String authHeader) {
+        User user = getCurrentUser(authHeader);
+        List<CustomerOrder> orders = customerOrderRepository.findByUserIdOrderByCreatedAtDesc(user.getId());
+
+        if (orders.isEmpty()) {
+            return List.of();
+        }
+
+        List<Long> orderIds = orders.stream()
+                .map(CustomerOrder::getId)
+                .toList();
+        List<OrderItem> orderItems = orderItemRepository.findByOrderIdIn(orderIds);
+        Map<Long, List<OrderItem>> itemsByOrderId = orderItems.stream()
+                .collect(Collectors.groupingBy(item -> item.getOrder().getId(), HashMap::new, Collectors.toList()));
+
+        List<Long> productIds = orderItems.stream()
+                .map(OrderItem::getProductId)
+                .filter(java.util.Objects::nonNull)
+                .distinct()
+                .toList();
+        Map<Long, Integer> ratingsByProductId = productIds.isEmpty()
+                ? Map.of()
+                : productRatingRepository.findByUserIdAndProductIdIn(user.getId(), productIds)
+                        .stream()
+                        .collect(Collectors.toMap(
+                                rating -> rating.getProduct().getId(),
+                                ProductRating::getRating
+                        ));
+
+        return orders.stream()
+                .sorted(Comparator.comparing(
+                        CustomerOrder::getCreatedAt,
+                        Comparator.nullsLast(Comparator.naturalOrder())
+                ).reversed())
+                .map(order -> new OrderHistoryResponse(
+                        order.getId(),
+                        isBlank(order.getOrderNumber()) ? "VASTRA-" + order.getId() : order.getOrderNumber(),
+                        order.getRazorpayOrderId(),
+                        order.getRazorpayPaymentId(),
+                        isBlank(order.getPaymentMethod()) ? "RAZORPAY" : order.getPaymentMethod(),
+                        order.getPaymentStatus() == null ? order.getStatus() : order.getPaymentStatus(),
+                        resolveTrackingStatus(order),
+                        order.getFullName(),
+                        order.getPhone(),
+                        order.getPincode(),
+                        order.getAddressLine(),
+                        order.getCity(),
+                        order.getState(),
+                        order.getTotalMrp(),
+                        order.getCouponDiscount(),
+                        order.getPlatformFee(),
+                        order.getFinalAmount(),
+                        order.getCouponCode(),
+                        order.getCreatedAt(),
+                        itemsByOrderId.getOrDefault(order.getId(), List.of()).stream()
+                                .map(item -> new OrderHistoryItemResponse(
+                                        item.getProductId(),
+                                        item.getProductName(),
+                                        item.getImageUrl(),
+                                        item.getPrice(),
+                                        item.getQuantity(),
+                                        ratingsByProductId.get(item.getProductId())
+                                ))
+                                .toList()
+                ))
+                .toList();
+    }
+
     public Set<Long> getPurchasedProductIds(String authHeader) {
         User user = getCurrentUser(authHeader);
         return orderItemRepository.findByOrderUserId(user.getId())
@@ -179,6 +264,26 @@ public class OrderService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cart is empty");
         }
         return cartItems;
+    }
+
+    private void validateRazorpayConfig() {
+        if (isBlank(razorpayKeyId) || isBlank(razorpayKeySecret)) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Razorpay is not configured on the server"
+            );
+        }
+    }
+
+    private String generateOrderNumber() {
+        return "VASTRA-" + System.currentTimeMillis();
+    }
+
+    private String resolveTrackingStatus(CustomerOrder order) {
+        if (!isBlank(order.getTrackingStatus())) {
+            return order.getTrackingStatus();
+        }
+        return "ORDER_CONFIRMED";
     }
 
     private AddressRequest validateAddress(AddressRequest address) {

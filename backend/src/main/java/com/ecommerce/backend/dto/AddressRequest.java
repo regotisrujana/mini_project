@@ -2,6 +2,7 @@ package com.ecommerce.backend.dto;
 
 public class AddressRequest {
 
+    private String label;
     private String fullName;
     private String phone;
     private String pincode;
@@ -10,6 +11,14 @@ public class AddressRequest {
     private String state;
     private Double latitude;
     private Double longitude;
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
 
     public String getFullName() {
         return fullName;

@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 function Dashboard() {
   const navigate = useNavigate();
   const [wishlistCount, setWishlistCount] = useState(0);
+  const [orderCount, setOrderCount] = useState(0);
   const token = localStorage.getItem("token");
   const name = localStorage.getItem("name");
   const role = localStorage.getItem("role");
@@ -34,8 +35,31 @@ function Dashboard() {
       });
   }, [token, navigate]);
 
+  useEffect(() => {
+    if (!token) {
+      setOrderCount(0);
+      return;
+    }
+
+    axios.get("http://localhost:8080/api/orders", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then((res) => {
+        setOrderCount(res.data.length);
+      })
+      .catch((err) => {
+        console.log("Error fetching order count:", err.response || err);
+      });
+  }, [token]);
+
   const handleLogout = () => {
+    const preservedEntries = Object.entries(localStorage).filter(([key]) => key.startsWith("selectedAddressId:"));
     localStorage.clear();
+    preservedEntries.forEach(([key, value]) => {
+      localStorage.setItem(key, value);
+    });
     navigate("/login");
   };
 
@@ -61,6 +85,7 @@ function Dashboard() {
             <Link to="/" className="account-link-card">Browse Products</Link>
             <Link to="/wishlist" className="account-link-card">Wishlist ({wishlistCount})</Link>
             <Link to="/cart" className="account-link-card">Cart</Link>
+            <Link to="/orders" className="account-link-card">Orders ({orderCount})</Link>
           </div>
         </article>
 

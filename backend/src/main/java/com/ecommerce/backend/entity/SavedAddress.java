@@ -19,7 +19,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CustomerOrder {
+public class SavedAddress {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,29 +27,7 @@ public class CustomerOrder {
 
     private Long userId;
 
-    private String orderNumber;
-
-    private String razorpayOrderId;
-
-    private String razorpayPaymentId;
-
-    private String paymentMethod;
-
-    private String paymentStatus;
-
-    private String status;
-
-    private String trackingStatus;
-
-    private double totalMrp;
-
-    private double couponDiscount;
-
-    private double platformFee;
-
-    private double finalAmount;
-
-    private String couponCode;
+    private String label;
 
     private String fullName;
 
@@ -69,4 +47,6 @@ public class CustomerOrder {
     private Double longitude;
 
     private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 }

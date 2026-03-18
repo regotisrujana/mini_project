@@ -8,6 +8,7 @@ import Wishlist from "./pages/Wishlist";
 import Cart from "./pages/Cart";
 import CheckoutAddress from "./pages/CheckoutAddress";
 import ProductDetails from "./pages/ProductDetails";
+import Orders from "./pages/Orders";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
@@ -67,6 +68,15 @@ function App() {
           element={
             <ProtectedRoute>
               <CheckoutAddress />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <Orders />
             </ProtectedRoute>
           }
         />

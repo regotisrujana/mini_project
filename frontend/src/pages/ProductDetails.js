@@ -308,9 +308,11 @@ function ProductDetails() {
             <strong>Rs. {product.price}</strong>
           </div>
           <p className="product-tax-note">inclusive of all taxes</p>
-          <p className="product-tax-note">
-            {selectedSize ? `${selectedSize} stock available: ${selectedVariantStock}` : `Available stock: ${getResolvedStock(product)}`}
-          </p>
+          {selectedVariantStock > 0 && selectedVariantStock <= 3 && (
+            <p className="product-tax-note product-low-stock-note">
+              {selectedSize ? `${selectedSize} only ${selectedVariantStock} left` : `Only ${selectedVariantStock} left`}
+            </p>
+          )}
 
           {colors.length > 0 && (
             <div className="product-option-block">

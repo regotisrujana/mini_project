@@ -1,10 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
+
+function getSelectedAddressStorageKey() {
+  return `selectedAddressId:${localStorage.getItem("email") || "user"}`;
+}
 
 function CheckoutAddress() {
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
   const [isLocating, setIsLocating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [savedAddresses, setSavedAddresses] = useState([]);
   const [address, setAddress] = useState({
+    label: "",
     fullName: localStorage.getItem("name") || "",
     phone: "",
     pincode: "",
@@ -19,15 +30,31 @@ function CheckoutAddress() {
   });
 
   useEffect(() => {
-    const saved = localStorage.getItem("checkoutAddress");
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setAddress((current) => ({
-        ...current,
-        ...parsed
-      }));
-    }
-  }, []);
+    axios.get(`${API_BASE_URL}/api/addresses`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then((res) => {
+        setSavedAddresses(res.data);
+        const selectedAddressId = localStorage.getItem(getSelectedAddressStorageKey());
+        const selectedAddress = res.data.find((item) => String(item.id) === selectedAddressId) || res.data[0];
+
+        if (selectedAddress) {
+          localStorage.setItem(getSelectedAddressStorageKey(), String(selectedAddress.id));
+          setAddress((current) => ({
+            ...current,
+            ...selectedAddress,
+            houseNumber: "",
+            street: "",
+            landmark: ""
+          }));
+        }
+      })
+      .catch((err) => {
+        console.log(err.response || err);
+      });
+  }, [token]);
 
   const handleChange = (e) => {
     setAddress((current) => ({
@@ -112,7 +139,7 @@ function CheckoutAddress() {
     return `https://www.openstreetmap.org/export/embed.html?bbox=${lon - delta}%2C${lat - delta}%2C${lon + delta}%2C${lat + delta}&layer=mapnik&marker=${lat}%2C${lon}`;
   }, [address.latitude, address.longitude]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const addressLine = [
       address.houseNumber,
       address.street,
@@ -124,12 +151,50 @@ function CheckoutAddress() {
       return;
     }
 
-    localStorage.setItem("checkoutAddress", JSON.stringify({
-      ...address,
-      addressLine
-    }));
-    alert("Address saved");
+    try {
+      setIsSaving(true);
+      const res = await axios.post(`${API_BASE_URL}/api/addresses`, {
+        ...address,
+        label: address.label || `Address ${savedAddresses.length + 1}`,
+        addressLine
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      setSavedAddresses((current) => [res.data, ...current]);
+      localStorage.setItem(getSelectedAddressStorageKey(), String(res.data.id));
+      alert("Address saved");
+      navigate("/cart");
+    } catch (err) {
+      console.log(err.response || err);
+      alert(err.response?.data?.message || err.response?.data || "Failed to save address");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleSelectSavedAddress = (savedAddress) => {
+    localStorage.setItem(getSelectedAddressStorageKey(), String(savedAddress.id));
     navigate("/cart");
+  };
+
+  const handleAddNewAddress = () => {
+    setAddress({
+      label: "",
+      fullName: localStorage.getItem("name") || "",
+      phone: "",
+      pincode: "",
+      houseNumber: "",
+      street: "",
+      landmark: "",
+      addressLine: "",
+      city: "",
+      state: "",
+      latitude: "",
+      longitude: ""
+    });
   };
 
   return (
@@ -144,11 +209,39 @@ function CheckoutAddress() {
 
       <div className="address-layout">
         <section className="address-form-card">
+          {savedAddresses.length > 0 && (
+            <div className="saved-addresses-panel">
+              <div className="saved-addresses-header">
+                <div>
+                  <p className="section-label">Saved Addresses</p>
+                  <h3>Choose one or add new</h3>
+                </div>
+                <button className="checkout-secondary-button" onClick={handleAddNewAddress}>Add New Address</button>
+              </div>
+
+              <div className="saved-addresses-list">
+                {savedAddresses.map((savedAddress) => (
+                  <button
+                    key={savedAddress.id}
+                    className="saved-address-card"
+                    onClick={() => handleSelectSavedAddress(savedAddress)}
+                  >
+                    <strong>{savedAddress.label || "Saved Address"}</strong>
+                    <span>{savedAddress.fullName}</span>
+                    <span>{savedAddress.addressLine}</span>
+                    <span>{savedAddress.city}, {savedAddress.state} - {savedAddress.pincode}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <p className="section-label">Address Details</p>
           <h3>Where should we deliver?</h3>
-          <p className="address-helper">Save the address once. We’ll reuse it for the current order.</p>
+          <p className="address-helper">Save multiple addresses and switch between them any time.</p>
 
           <div className="address-grid">
+            <input className="checkout-input" type="text" name="label" placeholder="Address Label (Home, Office)" value={address.label} onChange={handleChange} />
             <input className="checkout-input" type="text" name="fullName" placeholder="Full Name" value={address.fullName} onChange={handleChange} />
             <input className="checkout-input" type="text" name="phone" placeholder="Phone Number" value={address.phone} onChange={handleChange} />
             <input className="checkout-input" type="text" name="houseNumber" placeholder="House / Flat Number" value={address.houseNumber} onChange={handleChange} />
@@ -163,7 +256,9 @@ function CheckoutAddress() {
             <button className="checkout-secondary-button" onClick={handleUseCurrentLocation} disabled={isLocating}>
               {isLocating ? "Locating..." : "Use Current Location"}
             </button>
-            <button className="checkout-primary-button" onClick={handleSave}>Save Address</button>
+            <button className="checkout-primary-button" onClick={handleSave} disabled={isSaving}>
+              {isSaving ? "Saving..." : "Save Address"}
+            </button>
           </div>
         </section>
 
