@@ -1,15 +1,15 @@
-2026-03-18T08:53:16.018+05:30  INFO 24128 --- [backend] [main] c.e.backend.BackendApplicationTests      : Starting BackendApplicationTests using Java 21.0.9 with PID 24128 (started by regot in C:\tt3_2\mini\backend)
-2026-03-18T08:53:16.027+05:30 DEBUG 24128 --- [backend] [main] c.e.backend.BackendApplicationTests      : Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-18T08:53:16.027+05:30  INFO 24128 --- [backend] [main] c.e.backend.BackendApplicationTests      : No active profile set, falling back to 1 default profile: "default"
-2026-03-18T08:53:17.083+05:30  INFO 24128 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-18T08:53:17.188+05:30  INFO 24128 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 91 ms. Found 8 JPA repository interfaces.
-2026-03-18T08:53:17.921+05:30  INFO 24128 --- [backend] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-18T08:53:18.052+05:30  INFO 24128 --- [backend] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.1.Final
-2026-03-18T08:53:18.931+05:30  INFO 24128 --- [backend] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-18T08:53:18.989+05:30  INFO 24128 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-03-18T08:53:19.666+05:30  INFO 24128 --- [backend] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@446cc036
-2026-03-18T08:53:19.669+05:30  INFO 24128 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-03-18T08:53:19.773+05:30  INFO 24128 --- [backend] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+2026-04-03T09:38:37.507+05:30  INFO 16900 --- [backend] [main] c.e.backend.BackendApplicationTests      : Starting BackendApplicationTests using Java 21.0.9 with PID 16900 (started by regot in C:\tt3_2\mini\backend)
+2026-04-03T09:38:37.507+05:30 DEBUG 16900 --- [backend] [main] c.e.backend.BackendApplicationTests      : Running with Spring Boot v4.0.2, Spring v7.0.3
+2026-04-03T09:38:37.507+05:30  INFO 16900 --- [backend] [main] c.e.backend.BackendApplicationTests      : No active profile set, falling back to 1 default profile: "default"
+2026-04-03T09:38:38.674+05:30  INFO 16900 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-04-03T09:38:38.772+05:30  INFO 16900 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 89 ms. Found 9 JPA repository interfaces.
+2026-04-03T09:38:39.781+05:30  INFO 16900 --- [backend] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-03T09:38:39.976+05:30  INFO 16900 --- [backend] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.1.Final
+2026-04-03T09:38:40.825+05:30  INFO 16900 --- [backend] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-04-03T09:38:40.854+05:30  INFO 16900 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-04-03T09:38:41.638+05:30  INFO 16900 --- [backend] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@16c9e378
+2026-04-03T09:38:41.638+05:30  INFO 16900 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-04-03T09:38:41.856+05:30  INFO 16900 --- [backend] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
 	Database JDBC URL [jdbc:mysql://localhost:3306/ecommerce_db]
 	Database driver: MySQL Connector/J
 	Database dialect: MySQLDialect
@@ -21,211 +21,13 @@
 	Pool: DataSourceConnectionProvider
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-03-18T08:53:21.551+05:30  INFO 24128 --- [backend] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-18T08:53:21.658+05:30  INFO 24128 --- [backend] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-18T08:53:21.811+05:30  INFO 24128 --- [backend] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-18T08:53:22.464+05:30  WARN 24128 --- [backend] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-03-18T08:53:22.641+05:30  INFO 24128 --- [backend] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-03-18T08:53:22.996+05:30 DEBUG 24128 --- [backend] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2026-03-18T08:53:23.672+05:30  INFO 24128 --- [backend] [main] c.e.backend.BackendApplicationTests      : Started BackendApplicationTests in 8.127 seconds (process running for 9.689)
-2026-03-18T08:53:24.082+05:30  INFO 24128 --- [backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-18T08:53:24.084+05:30  INFO 24128 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-03-18T08:53:24.107+05:30  INFO 24128 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2026-03-18T09:11:05.413+05:30  INFO 14760 --- [backend] [main] c.e.backend.BackendApplicationTests      : Starting BackendApplicationTests using Java 21.0.9 with PID 14760 (started by regot in C:\tt3_2\mini\backend)
-2026-03-18T09:11:05.421+05:30 DEBUG 14760 --- [backend] [main] c.e.backend.BackendApplicationTests      : Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-18T09:11:05.421+05:30  INFO 14760 --- [backend] [main] c.e.backend.BackendApplicationTests      : No active profile set, falling back to 1 default profile: "default"
-2026-03-18T09:11:06.373+05:30  INFO 14760 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-18T09:11:06.471+05:30  INFO 14760 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 81 ms. Found 8 JPA repository interfaces.
-2026-03-18T09:11:07.191+05:30  INFO 14760 --- [backend] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-18T09:11:07.289+05:30  INFO 14760 --- [backend] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.1.Final
-2026-03-18T09:11:08.140+05:30  INFO 14760 --- [backend] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-18T09:11:08.173+05:30  INFO 14760 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-03-18T09:11:08.632+05:30  INFO 14760 --- [backend] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6f27730b
-2026-03-18T09:11:08.634+05:30  INFO 14760 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-03-18T09:11:08.788+05:30  INFO 14760 --- [backend] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [jdbc:mysql://localhost:3306/ecommerce_db]
-	Database driver: MySQL Connector/J
-	Database dialect: MySQLDialect
-	Database version: 8.0.44
-	Default catalog/schema: ecommerce_db/undefined
-	Autocommit mode: undefined/unknown
-	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
-	JDBC fetch size: none
-	Pool: DataSourceConnectionProvider
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2026-03-18T09:11:10.180+05:30  INFO 14760 --- [backend] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-18T09:11:10.512+05:30  INFO 14760 --- [backend] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-18T09:11:10.637+05:30  INFO 14760 --- [backend] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-18T09:11:11.090+05:30  WARN 14760 --- [backend] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-03-18T09:11:11.238+05:30  INFO 14760 --- [backend] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-03-18T09:11:11.482+05:30 DEBUG 14760 --- [backend] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2026-03-18T09:11:13.415+05:30  INFO 14760 --- [backend] [main] c.e.backend.BackendApplicationTests      : Started BackendApplicationTests in 8.396 seconds (process running for 9.961)
-2026-03-18T09:11:14.535+05:30  INFO 14760 --- [backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-18T09:11:14.667+05:30  INFO 14760 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-03-18T09:11:14.687+05:30  INFO 14760 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2026-03-18T09:16:50.084+05:30  INFO 7776 --- [backend] [main] c.e.backend.BackendApplicationTests      : Starting BackendApplicationTests using Java 21.0.9 with PID 7776 (started by regot in C:\tt3_2\mini\backend)
-2026-03-18T09:16:50.086+05:30 DEBUG 7776 --- [backend] [main] c.e.backend.BackendApplicationTests      : Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-18T09:16:50.086+05:30  INFO 7776 --- [backend] [main] c.e.backend.BackendApplicationTests      : No active profile set, falling back to 1 default profile: "default"
-2026-03-18T09:16:51.106+05:30  INFO 7776 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-18T09:16:51.238+05:30  INFO 7776 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 120 ms. Found 8 JPA repository interfaces.
-2026-03-18T09:16:52.017+05:30  INFO 7776 --- [backend] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-18T09:16:52.123+05:30  INFO 7776 --- [backend] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.1.Final
-2026-03-18T09:16:52.928+05:30  INFO 7776 --- [backend] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-18T09:16:52.959+05:30  INFO 7776 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-03-18T09:16:53.450+05:30  INFO 7776 --- [backend] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3e0704e2
-2026-03-18T09:16:53.452+05:30  INFO 7776 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-03-18T09:16:53.585+05:30  INFO 7776 --- [backend] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [jdbc:mysql://localhost:3306/ecommerce_db]
-	Database driver: MySQL Connector/J
-	Database dialect: MySQLDialect
-	Database version: 8.0.44
-	Default catalog/schema: ecommerce_db/undefined
-	Autocommit mode: undefined/unknown
-	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
-	JDBC fetch size: none
-	Pool: DataSourceConnectionProvider
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2026-03-18T09:16:55.067+05:30  INFO 7776 --- [backend] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-18T09:16:55.177+05:30  INFO 7776 --- [backend] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-18T09:16:55.298+05:30  INFO 7776 --- [backend] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-18T09:16:55.808+05:30  WARN 7776 --- [backend] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-03-18T09:16:55.999+05:30  INFO 7776 --- [backend] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-03-18T09:16:56.240+05:30 DEBUG 7776 --- [backend] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2026-03-18T09:16:56.838+05:30  INFO 7776 --- [backend] [main] c.e.backend.BackendApplicationTests      : Started BackendApplicationTests in 7.103 seconds (process running for 8.849)
-2026-03-18T09:16:57.415+05:30  INFO 7776 --- [backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-18T09:16:57.415+05:30  INFO 7776 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-03-18T09:16:57.431+05:30  INFO 7776 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2026-03-18T09:26:18.529+05:30  INFO 14612 --- [backend] [main] c.e.backend.BackendApplicationTests      : Starting BackendApplicationTests using Java 21.0.9 with PID 14612 (started by regot in C:\tt3_2\mini\backend)
-2026-03-18T09:26:18.529+05:30 DEBUG 14612 --- [backend] [main] c.e.backend.BackendApplicationTests      : Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-18T09:26:18.529+05:30  INFO 14612 --- [backend] [main] c.e.backend.BackendApplicationTests      : No active profile set, falling back to 1 default profile: "default"
-2026-03-18T09:26:19.442+05:30  INFO 14612 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-18T09:26:19.524+05:30  INFO 14612 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 70 ms. Found 8 JPA repository interfaces.
-2026-03-18T09:26:20.199+05:30  INFO 14612 --- [backend] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-18T09:26:20.313+05:30  INFO 14612 --- [backend] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.1.Final
-2026-03-18T09:26:21.079+05:30  INFO 14612 --- [backend] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-18T09:26:21.111+05:30  INFO 14612 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-03-18T09:26:21.585+05:30  INFO 14612 --- [backend] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6f27730b
-2026-03-18T09:26:21.589+05:30  INFO 14612 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-03-18T09:26:21.696+05:30  INFO 14612 --- [backend] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [jdbc:mysql://localhost:3306/ecommerce_db]
-	Database driver: MySQL Connector/J
-	Database dialect: MySQLDialect
-	Database version: 8.0.44
-	Default catalog/schema: ecommerce_db/undefined
-	Autocommit mode: undefined/unknown
-	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
-	JDBC fetch size: none
-	Pool: DataSourceConnectionProvider
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2026-03-18T09:26:23.079+05:30  INFO 14612 --- [backend] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-18T09:26:23.185+05:30  INFO 14612 --- [backend] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-18T09:26:23.324+05:30  INFO 14612 --- [backend] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-18T09:26:23.931+05:30  WARN 14612 --- [backend] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-03-18T09:26:24.081+05:30  INFO 14612 --- [backend] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-03-18T09:26:24.272+05:30 DEBUG 14612 --- [backend] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2026-03-18T09:26:24.910+05:30  INFO 14612 --- [backend] [main] c.e.backend.BackendApplicationTests      : Started BackendApplicationTests in 6.731 seconds (process running for 8.15)
-2026-03-18T09:26:25.615+05:30  INFO 14612 --- [backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-18T09:26:25.630+05:30  INFO 14612 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-03-18T09:26:25.649+05:30  INFO 14612 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2026-03-18T09:39:01.634+05:30  INFO 16464 --- [backend] [main] c.e.backend.BackendApplicationTests      : Starting BackendApplicationTests using Java 21.0.9 with PID 16464 (started by regot in C:\tt3_2\mini\backend)
-2026-03-18T09:39:01.634+05:30 DEBUG 16464 --- [backend] [main] c.e.backend.BackendApplicationTests      : Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-18T09:39:01.635+05:30  INFO 16464 --- [backend] [main] c.e.backend.BackendApplicationTests      : No active profile set, falling back to 1 default profile: "default"
-2026-03-18T09:39:02.565+05:30  INFO 16464 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-18T09:39:02.661+05:30  INFO 16464 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 77 ms. Found 9 JPA repository interfaces.
-2026-03-18T09:39:03.469+05:30  INFO 16464 --- [backend] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-18T09:39:03.551+05:30  INFO 16464 --- [backend] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.1.Final
-2026-03-18T09:39:04.268+05:30  INFO 16464 --- [backend] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-18T09:39:04.310+05:30  INFO 16464 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-03-18T09:39:04.720+05:30  INFO 16464 --- [backend] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@40277077
-2026-03-18T09:39:04.723+05:30  INFO 16464 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-03-18T09:39:04.841+05:30  INFO 16464 --- [backend] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [jdbc:mysql://localhost:3306/ecommerce_db]
-	Database driver: MySQL Connector/J
-	Database dialect: MySQLDialect
-	Database version: 8.0.44
-	Default catalog/schema: ecommerce_db/undefined
-	Autocommit mode: undefined/unknown
-	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
-	JDBC fetch size: none
-	Pool: DataSourceConnectionProvider
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2026-03-18T09:39:06.211+05:30  INFO 16464 --- [backend] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-18T09:39:06.437+05:30  INFO 16464 --- [backend] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-18T09:39:06.547+05:30  INFO 16464 --- [backend] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-18T09:39:07.066+05:30  WARN 16464 --- [backend] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-03-18T09:39:07.237+05:30  INFO 16464 --- [backend] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-03-18T09:39:07.447+05:30 DEBUG 16464 --- [backend] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2026-03-18T09:39:08.253+05:30  INFO 16464 --- [backend] [main] c.e.backend.BackendApplicationTests      : Started BackendApplicationTests in 6.992 seconds (process running for 8.342)
-2026-03-18T09:39:09.027+05:30  INFO 16464 --- [backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-18T09:39:09.032+05:30  INFO 16464 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-03-18T09:39:09.051+05:30  INFO 16464 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2026-03-18T11:46:47.924+05:30  INFO 15836 --- [backend] [main] c.e.backend.BackendApplicationTests      : Starting BackendApplicationTests using Java 21.0.9 with PID 15836 (started by regot in C:\tt3_2\mini\backend)
-2026-03-18T11:46:47.926+05:30 DEBUG 15836 --- [backend] [main] c.e.backend.BackendApplicationTests      : Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-18T11:46:47.928+05:30  INFO 15836 --- [backend] [main] c.e.backend.BackendApplicationTests      : No active profile set, falling back to 1 default profile: "default"
-2026-03-18T11:46:48.808+05:30  INFO 15836 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-18T11:46:48.889+05:30  INFO 15836 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 62 ms. Found 9 JPA repository interfaces.
-2026-03-18T11:46:49.515+05:30  INFO 15836 --- [backend] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-18T11:46:49.611+05:30  INFO 15836 --- [backend] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.1.Final
-2026-03-18T11:46:50.337+05:30  INFO 15836 --- [backend] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-18T11:46:50.360+05:30  INFO 15836 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-03-18T11:46:50.855+05:30  INFO 15836 --- [backend] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6ad198c9
-2026-03-18T11:46:50.859+05:30  INFO 15836 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-03-18T11:46:50.962+05:30  INFO 15836 --- [backend] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [jdbc:mysql://localhost:3306/ecommerce_db]
-	Database driver: MySQL Connector/J
-	Database dialect: MySQLDialect
-	Database version: 8.0.44
-	Default catalog/schema: ecommerce_db/undefined
-	Autocommit mode: undefined/unknown
-	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
-	JDBC fetch size: none
-	Pool: DataSourceConnectionProvider
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2026-03-18T11:46:52.388+05:30  INFO 15836 --- [backend] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-18T11:46:52.520+05:30  INFO 15836 --- [backend] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-18T11:46:52.656+05:30  INFO 15836 --- [backend] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-18T11:46:53.142+05:30  WARN 15836 --- [backend] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-03-18T11:46:53.337+05:30  INFO 15836 --- [backend] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-03-18T11:46:53.586+05:30 DEBUG 15836 --- [backend] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2026-03-18T11:46:54.177+05:30  INFO 15836 --- [backend] [main] c.e.backend.BackendApplicationTests      : Started BackendApplicationTests in 6.656 seconds (process running for 7.981)
-2026-03-18T11:46:54.905+05:30  INFO 15836 --- [backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-18T11:46:54.907+05:30  INFO 15836 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-03-18T11:46:54.928+05:30  INFO 15836 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2026-03-18T11:48:10.342+05:30  INFO 5424 --- [backend] [main] c.e.backend.BackendApplicationTests      : Starting BackendApplicationTests using Java 21.0.9 with PID 5424 (started by regot in C:\tt3_2\mini\backend)
-2026-03-18T11:48:10.342+05:30 DEBUG 5424 --- [backend] [main] c.e.backend.BackendApplicationTests      : Running with Spring Boot v4.0.2, Spring v7.0.3
-2026-03-18T11:48:10.342+05:30  INFO 5424 --- [backend] [main] c.e.backend.BackendApplicationTests      : No active profile set, falling back to 1 default profile: "default"
-2026-03-18T11:48:11.316+05:30  INFO 5424 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-03-18T11:48:11.402+05:30  INFO 5424 --- [backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 67 ms. Found 9 JPA repository interfaces.
-2026-03-18T11:48:12.100+05:30  INFO 5424 --- [backend] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-03-18T11:48:12.184+05:30  INFO 5424 --- [backend] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.1.Final
-2026-03-18T11:48:12.881+05:30  INFO 5424 --- [backend] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-03-18T11:48:12.920+05:30  INFO 5424 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-03-18T11:48:13.386+05:30  INFO 5424 --- [backend] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@2c4eae94
-2026-03-18T11:48:13.390+05:30  INFO 5424 --- [backend] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-03-18T11:48:13.483+05:30  INFO 5424 --- [backend] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
-	Database JDBC URL [jdbc:mysql://localhost:3306/ecommerce_db]
-	Database driver: MySQL Connector/J
-	Database dialect: MySQLDialect
-	Database version: 8.0.44
-	Default catalog/schema: ecommerce_db/undefined
-	Autocommit mode: undefined/unknown
-	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
-	JDBC fetch size: none
-	Pool: DataSourceConnectionProvider
-	Minimum pool size: undefined/unknown
-	Maximum pool size: undefined/unknown
-2026-03-18T11:48:14.939+05:30  INFO 5424 --- [backend] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2026-03-18T11:48:15.053+05:30  INFO 5424 --- [backend] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-03-18T11:48:15.205+05:30  INFO 5424 --- [backend] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-03-18T11:48:15.808+05:30  WARN 5424 --- [backend] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-03-18T11:48:16.013+05:30  INFO 5424 --- [backend] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
-2026-03-18T11:48:16.252+05:30 DEBUG 5424 --- [backend] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
-2026-03-18T11:48:17.818+05:30  INFO 5424 --- [backend] [main] c.e.backend.BackendApplicationTests      : Started BackendApplicationTests in 7.815 seconds (process running for 9.242)
-2026-03-18T11:48:19.223+05:30  INFO 5424 --- [backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2026-03-18T11:48:19.238+05:30  INFO 5424 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2026-03-18T11:48:19.262+05:30  INFO 5424 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-04-03T09:38:43.574+05:30  INFO 16900 --- [backend] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-03T09:38:43.777+05:30  INFO 16900 --- [backend] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-04-03T09:38:43.938+05:30  INFO 16900 --- [backend] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-04-03T09:38:44.583+05:30  WARN 16900 --- [backend] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-04-03T09:38:44.856+05:30  INFO 16900 --- [backend] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-04-03T09:38:45.222+05:30 DEBUG 16900 --- [backend] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-04-03T09:38:45.739+05:30  INFO 16900 --- [backend] [main] c.e.backend.BackendApplicationTests      : Started BackendApplicationTests in 8.674 seconds (process running for 10.546)
+2026-04-03T09:38:46.406+05:30  INFO 16900 --- [backend] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-04-03T09:38:46.408+05:30  INFO 16900 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-04-03T09:38:46.422+05:30  INFO 16900 --- [backend] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
