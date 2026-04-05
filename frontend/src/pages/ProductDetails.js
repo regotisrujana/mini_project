@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { apiUrl } from "../config/api";
 
 const GUEST_CART_KEY = "guestCartItems";
 const APPAREL_SIZES = ["S", "M", "L", "XL", "XXL", "3XL"];
@@ -82,7 +83,7 @@ function ProductDetails() {
   const role = localStorage.getItem("role");
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/products/${id}`)
+    axios.get(apiUrl(`/api/products/${id}`))
       .then((res) => {
         setProduct(res.data);
         const colors = splitValues(res.data.color);
@@ -96,7 +97,7 @@ function ProductDetails() {
   }, [id, navigate]);
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/products/${id}/variants`)
+    axios.get(apiUrl(`/api/products/${id}/variants`))
       .then((res) => setVariants(res.data))
       .catch(() => setVariants([]));
   }, [id]);
@@ -109,7 +110,7 @@ function ProductDetails() {
       return;
     }
 
-    axios.get("http://localhost:8080/api/cart", {
+    axios.get(apiUrl("/api/cart"), {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -117,7 +118,7 @@ function ProductDetails() {
       .then((res) => setCartIds(res.data.map((item) => item.productId)))
       .catch(() => {});
 
-    axios.get("http://localhost:8080/api/wishlist", {
+    axios.get(apiUrl("/api/wishlist"), {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -182,10 +183,10 @@ function ProductDetails() {
 
     const inWishlist = wishlistIds.includes(product.id);
     const res = inWishlist
-      ? await axios.delete(`http://localhost:8080/api/wishlist/${product.id}`, {
+      ? await axios.delete(apiUrl(`/api/wishlist/${product.id}`), {
           headers: { Authorization: `Bearer ${token}` }
         })
-      : await axios.post(`http://localhost:8080/api/wishlist/${product.id}`, null, {
+      : await axios.post(apiUrl(`/api/wishlist/${product.id}`), null, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -229,7 +230,7 @@ function ProductDetails() {
       return;
     }
 
-    const res = await axios.post(`http://localhost:8080/api/cart/${product.id}`, null, {
+    const res = await axios.post(apiUrl(`/api/cart/${product.id}`), null, {
       headers: { Authorization: `Bearer ${token}` }
     });
     setCartIds(res.data.map((item) => item.productId));
@@ -246,7 +247,7 @@ function ProductDetails() {
     }
 
     try {
-      await axios.delete(`http://localhost:8080/api/products/${product.id}`, {
+      await axios.delete(apiUrl(`/api/products/${product.id}`), {
         headers: { Authorization: `Bearer ${token}` }
       });
       navigate("/");

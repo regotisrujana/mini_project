@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { apiUrl } from "../config/api";
 
-const topLinks = ["ALL", "MEN", "WOMEN"];
+const topLinks = ["AI", "ALL", "MEN", "WOMEN"];
 const promoLinks = ["Hot Trends", "Top Rated"];
 const defaultSizeOptions = ["XS", "S", "M", "L", "XL", "XXL", "28", "30", "32", "34", "38", "40", "42", "48"];
 const defaultColorOptions = ["Black", "White", "Blue", "Pink", "Green", "Red", "Brown", "Grey"];
@@ -75,6 +76,7 @@ function Products() {
   const [cartIds, setCartIds] = useState([]);
   const [cartQuantities, setCartQuantities] = useState({});
   const [showFilters, setShowFilters] = useState(false);
+  const [activeTopTab, setActiveTopTab] = useState("ALL");
   const [searchTerm, setSearchTerm] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [filters, setFilters] = useState({
@@ -229,7 +231,7 @@ function Products() {
   }, [showCamera, cameraReady]);
 
   useEffect(() => {
-    axios.get("http://localhost:8080/api/products")
+    axios.get(apiUrl("/api/products"))
       .then((res) => {
         setProducts(res.data);
       })
@@ -244,7 +246,7 @@ function Products() {
       return;
     }
 
-    axios.get("http://localhost:8080/api/wishlist", {
+    axios.get(apiUrl("/api/wishlist"), {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -275,7 +277,7 @@ function Products() {
       return;
     }
 
-    axios.get("http://localhost:8080/api/cart", {
+    axios.get(apiUrl("/api/cart"), {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -309,12 +311,12 @@ function Products() {
       setPendingProductIds((current) => [...current, productId]);
       const inWishlist = wishlistIds.includes(productId);
       const res = inWishlist
-        ? await axios.delete(`http://localhost:8080/api/wishlist/${productId}`, {
+        ? await axios.delete(apiUrl(`/api/wishlist/${productId}`), {
             headers: {
               Authorization: `Bearer ${token}`
             }
           })
-        : await axios.post(`http://localhost:8080/api/wishlist/${productId}`, null, {
+        : await axios.post(apiUrl(`/api/wishlist/${productId}`), null, {
             headers: {
               Authorization: `Bearer ${token}`
             }
@@ -387,7 +389,7 @@ function Products() {
     }
 
     try {
-      const res = await axios.post(`http://localhost:8080/api/cart/${productId}`, null, {
+      const res = await axios.post(apiUrl(`/api/cart/${productId}`), null, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -443,13 +445,13 @@ function Products() {
     try {
       let res;
       if (nextQuantity <= 0) {
-        res = await axios.delete(`http://localhost:8080/api/cart/${productId}`, {
+        res = await axios.delete(apiUrl(`/api/cart/${productId}`), {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
       } else {
-        res = await axios.put(`http://localhost:8080/api/cart/${productId}?quantity=${nextQuantity}`, null, {
+        res = await axios.put(apiUrl(`/api/cart/${productId}?quantity=${nextQuantity}`), null, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -485,7 +487,7 @@ function Products() {
     }
 
     try {
-      await axios.delete(`http://localhost:8080/api/products/${productId}`, {
+      await axios.delete(apiUrl(`/api/products/${productId}`), {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -569,7 +571,7 @@ function Products() {
     try {
       setAnalyzingStyle(true);
       setStyleError("");
-      const res = await axios.post("http://localhost:8080/api/color-analysis", formData, {
+      const res = await axios.post(apiUrl("/api/color-analysis"), formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         }
@@ -701,10 +703,14 @@ function Products() {
               <button
                 key={link}
                 className={`nav-pill-button ${
-                  (link === "ALL" && !filters.gender) || filters.gender === link ? "active" : ""
+                  activeTopTab === link ? "active" : ""
                 }`}
                 onClick={() => {
-                  if (link === "ALL") {
+                  setActiveTopTab(link);
+
+                  if (link === "AI") {
+                    setFilters((current) => ({ ...current, gender: "" }));
+                  } else if (link === "ALL") {
                     setFilters((current) => ({ ...current, gender: "" }));
                   } else if (link === "MEN") {
                     setFilters((current) => ({ ...current, gender: "MEN" }));
@@ -793,263 +799,269 @@ function Products() {
         </div>
       </header>
 
-      <section className="storefront-category-strip">
-        <div className="promo-link-row">
-          {promoLinks.map((link) => (
-            <button
-              key={link}
-              className="promo-link-button"
-              onClick={() => {
-                if (link === "Hot Trends") {
-                  setQuickFilter("HOT_TRENDS");
-                } else if (link === "Top Rated") {
-                  setQuickFilter("TOP_RATED");
-                }
-              }}
-            >
-              {link}
-            </button>
-          ))}
-          <button
-            className="promo-link-button filter-strip-button"
-            onClick={() => setShowFilters((current) => !current)}
-          >
-            {showFilters ? "Hide Filter" : "Filter"}
-          </button>
-        </div>
-      </section>
-
-      <section className="storefront-hero">
-        {heroProducts.length === 0 ? (
-          <div className="hero-empty-state">
-            <p className="section-label">Trending Products</p>
-            <h3>No trending products yet</h3>
-            <span>Mark products as Hot Trend from the admin panel to show them here.</span>
-          </div>
-        ) : (
-          <>
-            <div className="hero-slider-heading">
-              <div>
-                <p className="section-label">Trending Products</p>
-                <h2>Hot Trend Picks</h2>
-              </div>
-              {heroSlides.length > 1 && (
-                <div className="hero-slider-controls">
-                  <button
-                    className="hero-slider-button"
-                    onClick={() =>
-                      setHeroIndex((current) => (current - 1 + heroSlides.length) % heroSlides.length)
+      {activeTopTab !== "AI" && (
+        <>
+          <section className="storefront-category-strip">
+            <div className="promo-link-row">
+              {promoLinks.map((link) => (
+                <button
+                  key={link}
+                  className="promo-link-button"
+                  onClick={() => {
+                    if (link === "Hot Trends") {
+                      setQuickFilter("HOT_TRENDS");
+                    } else if (link === "Top Rated") {
+                      setQuickFilter("TOP_RATED");
                     }
-                    aria-label="Previous trending product"
-                  >
-                    &#8249;
-                  </button>
-                  <button
-                    className="hero-slider-button"
-                    onClick={() => setHeroIndex((current) => (current + 1) % heroSlides.length)}
-                    aria-label="Next trending product"
-                  >
-                    &#8250;
-                  </button>
+                  }}
+                >
+                  {link}
+                </button>
+              ))}
+              <button
+                className="promo-link-button filter-strip-button"
+                onClick={() => setShowFilters((current) => !current)}
+              >
+                {showFilters ? "Hide Filter" : "Filter"}
+              </button>
+            </div>
+          </section>
+
+          <section className="storefront-hero">
+            {heroProducts.length === 0 ? (
+              <div className="hero-empty-state">
+                <p className="section-label">Trending Products</p>
+                <h3>No trending products yet</h3>
+                <span>Mark products as Hot Trend from the admin panel to show them here.</span>
+              </div>
+            ) : (
+              <>
+                <div className="hero-slider-heading">
+                  <div>
+                    <p className="section-label">Trending Products</p>
+                    <h2>Hot Trend Picks</h2>
+                  </div>
+                  {heroSlides.length > 1 && (
+                    <div className="hero-slider-controls">
+                      <button
+                        className="hero-slider-button"
+                        onClick={() =>
+                          setHeroIndex((current) => (current - 1 + heroSlides.length) % heroSlides.length)
+                        }
+                        aria-label="Previous trending product"
+                      >
+                        &#8249;
+                      </button>
+                      <button
+                        className="hero-slider-button"
+                        onClick={() => setHeroIndex((current) => (current + 1) % heroSlides.length)}
+                        aria-label="Next trending product"
+                      >
+                        &#8250;
+                      </button>
+                    </div>
+                  )}
                 </div>
-              )}
+
+                <div className="hero-slider-window">
+                  <div
+                    className="hero-slider-track"
+                    style={{ transform: `translateX(-${heroIndex * 100}%)` }}
+                  >
+                    {heroSlides.map((slide, slideIndex) => (
+                      <div key={`hero-slide-${slideIndex}`} className="hero-slide">
+                        {slide.map((product, cardIndex) => (
+                          <article
+                            key={product.id}
+                            className={`hero-card hero-card-${cardIndex + 1}`}
+                            onClick={() => navigate(`/products/${product.id}`)}
+                          >
+                            <img src={getPrimaryImage(product.imageUrl)} alt={product.name} />
+                            <div className="hero-overlay" />
+                            <div className="hero-copy">
+                              <p>{product.category || "Trending Product"}</p>
+                              <h3>{product.name}</h3>
+                              <span>From Rs. {product.price}</span>
+                            </div>
+                          </article>
+                        ))}
+                        {slide.length < 3 &&
+                          Array.from({ length: 3 - slide.length }).map((_, emptyIndex) => (
+                            <div
+                              key={`hero-slide-${slideIndex}-empty-${emptyIndex}`}
+                              className={`hero-card hero-card-${slide.length + emptyIndex + 1} hero-card-placeholder`}
+                              aria-hidden="true"
+                            />
+                          ))}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {heroSlides.length > 1 && (
+                  <div className="hero-slider-dots" aria-label="Trending products slider">
+                    {heroSlides.map((_, index) => (
+                      <button
+                        key={`hero-dot-${index}`}
+                        className={`hero-slider-dot ${index === heroIndex ? "active" : ""}`}
+                        onClick={() => setHeroIndex(index)}
+                        aria-label={`Go to trending slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </section>
+        </>
+      )}
+
+      {activeTopTab === "AI" && (
+        <section className="style-assistant-section">
+          <div className="style-assistant-card style-assistant-intro">
+            <div>
+              <p className="section-label">AI Style Assistant</p>
+              <h2>Find colors that flatter your skin tone</h2>
+              <p className="style-assistant-copy">
+                Upload a clear selfie and we&apos;ll estimate your tone profile, suggest colors that should suit you, and pull matching products from your store.
+              </p>
             </div>
 
-            <div className="hero-slider-window">
-              <div
-                className="hero-slider-track"
-                style={{ transform: `translateX(-${heroIndex * 100}%)` }}
-              >
-                {heroSlides.map((slide, slideIndex) => (
-                  <div key={`hero-slide-${slideIndex}`} className="hero-slide">
-                    {slide.map((product, cardIndex) => (
+            <div className="style-assistant-upload">
+              <label className="style-upload-dropzone">
+                <input type="file" accept="image/*" onChange={handleStylePhotoChange} />
+                {stylePreview ? (
+                  <img src={stylePreview} alt="Style analysis preview" className="style-upload-preview" />
+                ) : (
+                  <div className="style-upload-placeholder">
+                    <strong>Upload or click your photo</strong>
+                    <span>Natural light and a front-facing image work best.</span>
+                  </div>
+                )}
+              </label>
+
+              <div className="style-upload-actions">
+                <div className="style-upload-button-row">
+                  <button type="button" className="checkout-secondary-button" onClick={openCameraModal}>
+                    Click Photo
+                  </button>
+                  <label className="style-upload-inline-picker">
+                    <input type="file" accept="image/*" onChange={handleStylePhotoChange} />
+                    Upload Photo
+                  </label>
+                </div>
+                <button className="checkout-primary-button" onClick={handleAnalyzeStyle} disabled={analyzingStyle}>
+                  {analyzingStyle ? "Analyzing..." : "Analyze My Colors"}
+                </button>
+                <span className="style-upload-note">Best for face photos with even lighting and minimal heavy filters.</span>
+              </div>
+
+              {styleError && <p className="style-analysis-error">{styleError}</p>}
+            </div>
+          </div>
+
+          {styleAnalysis && (
+            <div className="style-assistant-results">
+              <article className="style-assistant-card style-profile-card">
+                <div className="style-profile-header">
+                  <div>
+                    <p className="section-label">Detected Profile</p>
+                    <h3>{styleAnalysis.profile?.season || "Personalized Palette"}</h3>
+                  </div>
+                  <div className="style-profile-tags">
+                    <span>{styleAnalysis.profile?.depth}</span>
+                    <span>{styleAnalysis.profile?.undertone}</span>
+                  </div>
+                </div>
+
+                <p className="style-profile-summary">{styleAnalysis.profile?.summary}</p>
+
+                <div className="style-palette-block">
+                  <div>
+                    <h4>Best Colors For You</h4>
+                    <div className="style-chip-grid">
+                      {(styleAnalysis.recommendedColors || []).map((color) => (
+                        <div key={color.name} className="style-color-chip">
+                          <span className="style-color-dot" style={{ backgroundColor: color.hex }} aria-hidden="true" />
+                          <div>
+                            <strong>{color.name}</strong>
+                            <small>{color.reason}</small>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4>Use Less Often</h4>
+                    <div className="style-chip-grid muted">
+                      {(styleAnalysis.colorsToAvoid || []).map((color) => (
+                        <div key={color.name} className="style-color-chip">
+                          <span className="style-color-dot" style={{ backgroundColor: color.hex }} aria-hidden="true" />
+                          <div>
+                            <strong>{color.name}</strong>
+                            <small>{color.reason}</small>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <p className="style-analysis-note">{styleAnalysis.analysisNote}</p>
+              </article>
+
+              <article className="style-assistant-card style-products-card">
+                <div className="style-products-header">
+                  <div>
+                    <p className="section-label">Shop The Palette</p>
+                    <h3>Recommended products from your catalog</h3>
+                  </div>
+                </div>
+
+                <div className="style-recommendation-grid">
+                  {(styleAnalysis.productRecommendations || []).length === 0 ? (
+                    <div className="checkout-empty">
+                      <h3>No matching products yet</h3>
+                      <p>Add more product color tags like blue, pink, olive, black, or green to improve matching.</p>
+                    </div>
+                  ) : (
+                    styleAnalysis.productRecommendations.map(({ product, matchReason, matchScore }) => (
                       <article
                         key={product.id}
-                        className={`hero-card hero-card-${cardIndex + 1}`}
+                        className="style-recommendation-card"
                         onClick={() => navigate(`/products/${product.id}`)}
                       >
                         <img src={getPrimaryImage(product.imageUrl)} alt={product.name} />
-                        <div className="hero-overlay" />
-                        <div className="hero-copy">
-                          <p>{product.category || "Trending Product"}</p>
-                          <h3>{product.name}</h3>
-                          <span>From Rs. {product.price}</span>
+                        <div className="style-recommendation-copy">
+                          <div className="style-recommendation-meta">
+                            <span>{(product.category || "Style").replaceAll("_", " ")}</span>
+                            <strong>Style score {matchScore}</strong>
+                          </div>
+                          <h4>{product.name}</h4>
+                          <p>{matchReason}</p>
+                          <div className="style-recommendation-footer">
+                            <strong>Rs. {product.price}</strong>
+                            <button
+                              className="product-action-button primary compact"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/products/${product.id}`);
+                              }}
+                            >
+                              View Product
+                            </button>
+                          </div>
                         </div>
                       </article>
-                    ))}
-                    {slide.length < 3 &&
-                      Array.from({ length: 3 - slide.length }).map((_, emptyIndex) => (
-                        <div
-                          key={`hero-slide-${slideIndex}-empty-${emptyIndex}`}
-                          className={`hero-card hero-card-${slide.length + emptyIndex + 1} hero-card-placeholder`}
-                          aria-hidden="true"
-                        />
-                      ))}
-                  </div>
-                ))}
-              </div>
+                    ))
+                  )}
+                </div>
+              </article>
             </div>
-
-            {heroSlides.length > 1 && (
-              <div className="hero-slider-dots" aria-label="Trending products slider">
-                {heroSlides.map((_, index) => (
-                  <button
-                    key={`hero-dot-${index}`}
-                    className={`hero-slider-dot ${index === heroIndex ? "active" : ""}`}
-                    onClick={() => setHeroIndex(index)}
-                    aria-label={`Go to trending slide ${index + 1}`}
-                  />
-                ))}
-              </div>
-            )}
-          </>
-        )}
-      </section>
-
-      <section className="style-assistant-section">
-        <div className="style-assistant-card style-assistant-intro">
-          <div>
-            <p className="section-label">AI Style Assistant</p>
-            <h2>Find colors that flatter your skin tone</h2>
-            <p className="style-assistant-copy">
-              Upload a clear selfie and we&apos;ll estimate your tone profile, suggest colors that should suit you, and pull matching products from your store.
-            </p>
-          </div>
-
-          <div className="style-assistant-upload">
-            <label className="style-upload-dropzone">
-              <input type="file" accept="image/*" onChange={handleStylePhotoChange} />
-              {stylePreview ? (
-                <img src={stylePreview} alt="Style analysis preview" className="style-upload-preview" />
-              ) : (
-                <div className="style-upload-placeholder">
-                  <strong>Upload or click your photo</strong>
-                  <span>Natural light and a front-facing image work best.</span>
-                </div>
-              )}
-            </label>
-
-            <div className="style-upload-actions">
-              <div className="style-upload-button-row">
-                <button type="button" className="checkout-secondary-button" onClick={openCameraModal}>
-                  Click Photo
-                </button>
-                <label className="style-upload-inline-picker">
-                  <input type="file" accept="image/*" onChange={handleStylePhotoChange} />
-                  Upload Photo
-                </label>
-              </div>
-              <button className="checkout-primary-button" onClick={handleAnalyzeStyle} disabled={analyzingStyle}>
-                {analyzingStyle ? "Analyzing..." : "Analyze My Colors"}
-              </button>
-              <span className="style-upload-note">Best for face photos with even lighting and minimal heavy filters.</span>
-            </div>
-
-            {styleError && <p className="style-analysis-error">{styleError}</p>}
-          </div>
-        </div>
-
-        {styleAnalysis && (
-          <div className="style-assistant-results">
-            <article className="style-assistant-card style-profile-card">
-              <div className="style-profile-header">
-                <div>
-                  <p className="section-label">Detected Profile</p>
-                  <h3>{styleAnalysis.profile?.season || "Personalized Palette"}</h3>
-                </div>
-                <div className="style-profile-tags">
-                  <span>{styleAnalysis.profile?.depth}</span>
-                  <span>{styleAnalysis.profile?.undertone}</span>
-                </div>
-              </div>
-
-              <p className="style-profile-summary">{styleAnalysis.profile?.summary}</p>
-
-              <div className="style-palette-block">
-                <div>
-                  <h4>Best Colors For You</h4>
-                  <div className="style-chip-grid">
-                    {(styleAnalysis.recommendedColors || []).map((color) => (
-                      <div key={color.name} className="style-color-chip">
-                        <span className="style-color-dot" style={{ backgroundColor: color.hex }} aria-hidden="true" />
-                        <div>
-                          <strong>{color.name}</strong>
-                          <small>{color.reason}</small>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h4>Use Less Often</h4>
-                  <div className="style-chip-grid muted">
-                    {(styleAnalysis.colorsToAvoid || []).map((color) => (
-                      <div key={color.name} className="style-color-chip">
-                        <span className="style-color-dot" style={{ backgroundColor: color.hex }} aria-hidden="true" />
-                        <div>
-                          <strong>{color.name}</strong>
-                          <small>{color.reason}</small>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <p className="style-analysis-note">{styleAnalysis.analysisNote}</p>
-            </article>
-
-            <article className="style-assistant-card style-products-card">
-              <div className="style-products-header">
-                <div>
-                  <p className="section-label">Shop The Palette</p>
-                  <h3>Recommended products from your catalog</h3>
-                </div>
-              </div>
-
-              <div className="style-recommendation-grid">
-                {(styleAnalysis.productRecommendations || []).length === 0 ? (
-                  <div className="checkout-empty">
-                    <h3>No matching products yet</h3>
-                    <p>Add more product color tags like blue, pink, olive, black, or green to improve matching.</p>
-                  </div>
-                ) : (
-                  styleAnalysis.productRecommendations.map(({ product, matchReason, matchScore }) => (
-                    <article
-                      key={product.id}
-                      className="style-recommendation-card"
-                      onClick={() => navigate(`/products/${product.id}`)}
-                    >
-                      <img src={getPrimaryImage(product.imageUrl)} alt={product.name} />
-                      <div className="style-recommendation-copy">
-                        <div className="style-recommendation-meta">
-                          <span>{(product.category || "Style").replaceAll("_", " ")}</span>
-                          <strong>Style score {matchScore}</strong>
-                        </div>
-                        <h4>{product.name}</h4>
-                        <p>{matchReason}</p>
-                        <div className="style-recommendation-footer">
-                          <strong>Rs. {product.price}</strong>
-                          <button
-                            className="product-action-button primary compact"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              navigate(`/products/${product.id}`);
-                            }}
-                          >
-                            View Product
-                          </button>
-                        </div>
-                      </div>
-                    </article>
-                  ))
-                )}
-              </div>
-            </article>
-          </div>
-        )}
-      </section>
+          )}
+        </section>
+      )}
 
       {showCamera && (
         <div className="camera-modal-backdrop" onClick={closeCameraModal}>
@@ -1115,6 +1127,7 @@ function Products() {
         </div>
       )}
 
+      {activeTopTab !== "AI" && (
       <section className={`storefront-content ${showFilters ? "filters-open" : ""}`}>
         <aside className={`storefront-filter-panel ${showFilters ? "open" : ""}`}>
           <div className="filter-panel-header">
@@ -1368,6 +1381,7 @@ function Products() {
           </div>
         </div>
       </section>
+      )}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { apiUrl } from "../config/api";
 
 const categoryOptionsByGender = {
   WOMEN: ["MIDI_DRESSES", "FORMAL_PANTS", "TROUSERS", "FORMAL_SHIRTS", "KURTHIS", "KURTHI_SETS", "JEANS", "TSHIRT"],
@@ -60,7 +61,7 @@ function AddProduct() {
   }, [navigate, role, token]);
 
   useEffect(() => {
-    axios.get("http://localhost:8080/api/products")
+    axios.get(apiUrl("/api/products"))
       .then((res) => setCatalogProducts(res.data))
       .catch((err) => console.log(err.response || err));
   }, []);
@@ -89,7 +90,7 @@ function AddProduct() {
     }
 
     try {
-      await axios.delete(`http://localhost:8080/api/products/${productId}`, {
+      await axios.delete(apiUrl(`/api/products/${productId}`), {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -114,7 +115,7 @@ function AddProduct() {
 
       try {
         response = await axios.put(
-          `http://localhost:8080/api/products/${productId}/trend`,
+          apiUrl(`/api/products/${productId}/trend`),
           { hotTrend: nextHotTrend },
           {
             headers: {
@@ -124,7 +125,7 @@ function AddProduct() {
         );
       } catch (putError) {
         response = await axios.post(
-          `http://localhost:8080/api/products/${productId}/trend`,
+          apiUrl(`/api/products/${productId}/trend`),
           { hotTrend: nextHotTrend },
           {
             headers: {
@@ -195,7 +196,7 @@ function AddProduct() {
         payload.append("images", file);
       }
 
-      const response = await fetch("http://localhost:8080/api/products", {
+      const response = await fetch(apiUrl("/api/products"), {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`
@@ -209,7 +210,7 @@ function AddProduct() {
       }
 
       alert("Product added successfully");
-      const refreshedProducts = await axios.get("http://localhost:8080/api/products");
+      const refreshedProducts = await axios.get(apiUrl("/api/products"));
       setCatalogProducts(refreshedProducts.data);
       setSizeStocks({});
       setFormData({

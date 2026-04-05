@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { apiUrl } from "../config/api";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function Dashboard() {
       return;
     }
 
-    axios.get("http://localhost:8080/api/wishlist", {
+    axios.get(apiUrl("/api/wishlist"), {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -41,7 +42,7 @@ function Dashboard() {
       return;
     }
 
-    axios.get("http://localhost:8080/api/orders", {
+    axios.get(apiUrl("/api/orders"), {
       headers: {
         Authorization: `Bearer ${token}`
       }

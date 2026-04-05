@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { apiUrl } from "../config/api";
 
 function getPrimaryImage(imageUrl) {
   return (imageUrl || "").split(",").map((item) => item.trim()).filter(Boolean)[0] || "";
@@ -13,7 +14,7 @@ function Wishlist() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    axios.get("http://localhost:8080/api/wishlist", {
+    axios.get(apiUrl("/api/wishlist"), {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -34,7 +35,7 @@ function Wishlist() {
   const handleRemove = async (productId) => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.delete(`http://localhost:8080/api/wishlist/${productId}`, {
+      const res = await axios.delete(apiUrl(`/api/wishlist/${productId}`), {
         headers: {
           Authorization: `Bearer ${token}`
         }

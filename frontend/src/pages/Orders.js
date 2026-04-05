@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
+import { API_BASE_URL } from "../config/api";
 
 function RatingStars({ value, onChange, disabled }) {
   return (

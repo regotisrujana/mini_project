@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config/api";
 
 const GUEST_CART_KEY = "guestCartItems";
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:8080";
 
 function getSelectedAddressStorageKey() {
   return `selectedAddressId:${localStorage.getItem("email") || "user"}`;
